@@ -47,7 +47,7 @@ async def create_file(request: web.Request) -> web.Response:
     for k, v in data.items():
         if k == 'file':
             file_content = v.file.read()
-            file_path = f'storage/tmp/{v.filename}'
+            file_path = f'storage/tmp/{created_file.uid}_{v.filename}'
 
             with open(file_path, 'wb') as f:
                 f.write(file_content)
