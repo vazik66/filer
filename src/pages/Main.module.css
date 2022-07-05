@@ -1,0 +1,19 @@
+body {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    transition: .3s;
+}
+
+h1 {
+    display: flex;
+    height: fit-content;
+    margin: 50px auto;
+    padding: 0;
+    z-index: 2;
+}
+
+.mainPage {
+    display: flex;
+    flex-flow: column;
+}
