@@ -3,7 +3,7 @@ import classes from "./FileManager.module.css";
 import File from "./File";
 import FileInput from "./FileInput";
 
-const filesInPackLimit = 10;
+const filesInPackLimit = 5;
 
 const FileManager = () => {
     const [files, setFiles] = useState([]);

@@ -1,13 +1,21 @@
 import React from 'react';
 import classes from "./FileInput.module.css";
 
+const filesInPackLimit = 5;
+
 const FileInput = ({files, setFiles}) => {
+    function addFiles(newFiles) {
+        const fileNames = files.map(file => file.name);
+        const result = newFiles.filter(file => !fileNames.includes(file.name));
+        setFiles(files.concat(result).slice(0, filesInPackLimit));
+    }
+
     return (
         <label className={classes.fileInput}>
             <input
                 className={classes.input}
                 type="file"
-                onChange={e => setFiles(files.concat([...e.target.files]))}
+                onChange={e => addFiles([...e.target.files])}
                 multiple
             />
             <div className={classes.text}>
