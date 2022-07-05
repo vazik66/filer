@@ -1,13 +1,11 @@
-import React, {useState} from 'react';
+import React from 'react';
 import classes from "./FileManager.module.css";
 import File from "./File";
 import FileInput from "./FileInput";
 
 const filesInPackLimit = 5;
 
-const FileManager = () => {
-    const [files, setFiles] = useState([]);
-
+const FileManager = ({files, setFiles}) => {
     return (
         <div className={classes.fileManager}>
             {files.map(file => <File file={file} files={files} setFiles={setFiles} />)}
