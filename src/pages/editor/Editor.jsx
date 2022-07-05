@@ -4,6 +4,14 @@ import FileManager from "./components/FileManager";
 
 const filesInPackLimit = 5;
 
+function fileFromString(text) {
+    const currentTime = Date.now();
+    return new File([text],
+        `${currentTime}.txt`,
+        {type: 'text/plain', lastModified: currentTime}
+    );
+}
+
 const Editor = () => {
     const [files, setFiles] = useState([]);
 
@@ -13,23 +21,37 @@ const Editor = () => {
         setFiles(files.concat(result).slice(0, filesInPackLimit));
     }
 
+    function onDrop(e) {
+        e.preventDefault();
+        addFiles([...e.dataTransfer.files]);
+    }
+
+    function onDragOver(e) {
+        e.preventDefault();
+    }
+
+    function onPaste(e) {
+        const clipboardText = e.clipboardData.getData('Text');
+        if (clipboardText) {
+            addFiles([fileFromString(clipboardText)]);
+            return;
+        }
+        const clipboardItems = Object.values(e.clipboardData.items);
+        const newFiles = clipboardItems
+            .filter(item => item.kind === 'file')
+            .map(item => item.getAsFile());
+        addFiles(newFiles);
+    }
+
     return (
         <div
             className={classes.editor}
-            onDrop={e => {
-                e.preventDefault();
-                addFiles([...e.dataTransfer.files]);
-            }}
-            onDragOver={e => e.preventDefault()}
-            onPaste={e => {
-                const newFiles = Object.values(e.clipboardData.items)
-                    .filter(element => element.kind === 'file')
-                    .map((element) => element.getAsFile());
-                addFiles(newFiles);
-            }}
+            onDrop={onDrop}
+            onDragOver={onDragOver}
+            onPaste={onPaste}
         >
             <h1>Filer</h1>
-            <FileManager files={files} setFiles={setFiles}/>
+            <FileManager files={files} setFiles={setFiles} addFiles={addFiles} />
         </div>
     );
 };
