@@ -1,7 +1,7 @@
 import React from 'react';
-import classes from "./FilePackList.module.css";
+import classes from "./PackList.module.css";
 import {v4 as uuid} from "uuid";
-import FilePack from "./FilePack";
+import Pack from "./Pack";
 
 const packs = [
     {name: '1', id: '51', files: []},
@@ -12,12 +12,12 @@ const packs = [
     {name: 'Create new pack', id: 'needToGenerateRandom', files: []},
 ];
 
-const FilePackList = () => {
+const PackList = () => {
     return (
         <div className={classes.packs}>
-            {packs.map(pack => <FilePack pack={pack} key={uuid()} />)}
+            {packs.map(element => <Pack pack={element} key={uuid()} />)}
         </div>
     );
 };
 
-export default FilePackList;
+export default PackList;

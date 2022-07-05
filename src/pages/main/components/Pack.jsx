@@ -1,15 +1,15 @@
 import React from 'react';
-import classes from "./FilePack.module.css";
+import classes from "./Pack.module.css";
 
-const FilePack = ({pack}) => {
+const Pack = ({pack}) => {
     return (
         <div
             className={classes.pack}
             onClick={() => alert(1)}
         >
-            <p>{pack.name}</p>
+            <div className={classes.text}>{pack.name}</div>
         </div>
     );
 };
 
-export default FilePack;
+export default Pack;

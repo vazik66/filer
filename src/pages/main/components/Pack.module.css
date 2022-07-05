@@ -11,9 +11,8 @@
     transition: .5s;
 }
 
-p {
+.text {
     margin: auto;
     padding: 0;
-
     font-size: 40px;
 }
