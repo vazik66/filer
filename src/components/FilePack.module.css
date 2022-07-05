@@ -1,0 +1,19 @@
+.pack {
+    display: flex;
+    background-color: green;
+    height: 300px;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.pack:hover {
+    background-color: blue;
+    transition: .5s;
+}
+
+p {
+    margin: auto;
+    padding: 0;
+
+    font-size: 40px;
+}

@@ -1,16 +1,26 @@
 import React from 'react';
-import classes from "./App.module.css";
+import classes from "./FilePackList.module.css";
 import {v4 as uuid} from "uuid";
+import FilePack from "./FilePack";
 
-const FilePackList = ({filePacks}) => {
+const packs = [
+    // {name: '1', id: '51', files: []},
+    // {name: '2', id: '52', files: []},
+    // {name: '3', id: '53', files: []},
+    // {name: '4', id: '54', files: []},
+    // {name: '5', id: '55', files: []},
+];
+
+const firstPack = {name: 'Create new pack', id: 'needToGenerateRandom', files: []};
+
+const FilePackList = () => {
     return (
-        <div className={classes.filePacks}>
-            {filePacks.map(() => (
-                <div
-                    className={classes.e}
-                    key={uuid()}
-                />
-            ))}
+        <div className={classes.packs}>
+            {
+                packs.length
+                    ? packs.map(pack => <FilePack pack={pack} key={uuid()} />)
+                    : <FilePack pack={firstPack} />
+            }
         </div>
     );
 };
