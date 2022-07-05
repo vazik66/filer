@@ -21,6 +21,12 @@ const Editor = () => {
                 addFiles([...e.dataTransfer.files]);
             }}
             onDragOver={e => e.preventDefault()}
+            onPaste={e => {
+                const newFiles = Object.values(e.clipboardData.items)
+                    .filter(element => element.kind === 'file')
+                    .map((element) => element.getAsFile());
+                addFiles(newFiles);
+            }}
         >
             <h1>Filer</h1>
             <FileManager files={files} setFiles={setFiles}/>
