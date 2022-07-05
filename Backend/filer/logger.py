@@ -1,6 +1,6 @@
 import logging
 
 
-def get_logger() -> logging.Logger:
+def get_logger(name: str = __name__) -> logging.Logger:
     logging.basicConfig(level=logging.DEBUG)
-    return logging.getLogger(__name__)
+    return logging.getLogger(name)
