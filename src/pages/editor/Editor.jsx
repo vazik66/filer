@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import classes from "./Editor.module.css";
 import FileManager from "./components/FileManager";
+import Settings from "./components/Settings";
 
 const filesInPackLimit = 5;
 
@@ -14,6 +15,8 @@ function fileFromString(text) {
 
 const Editor = () => {
     const [files, setFiles] = useState([]);
+    const [views, setViews] = useState(null);
+    const [time, setTime] = useState(null);
 
     function addFiles(newFiles) {
         const fileNames = files.map(file => file.name);
@@ -52,6 +55,7 @@ const Editor = () => {
         >
             <h1>Filer</h1>
             <FileManager files={files} setFiles={setFiles} addFiles={addFiles} />
+            <Settings setViews={setViews} />
         </div>
     );
 };

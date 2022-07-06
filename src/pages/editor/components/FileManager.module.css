@@ -1,6 +1,7 @@
 .fileManager {
-    flex-flow: column;
-    margin: 0 auto;
+    display: grid;
+    margin: 0 auto 60px auto;
     background-color: lightblue;
-    width: 50%;
+    width: 100%;
+    grid-gap: 30px;
 }

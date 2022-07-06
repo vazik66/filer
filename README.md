@@ -1,2 +1,3 @@
 # Filer
-`npm start` to run project
+`npm install`  
+`npm start`
