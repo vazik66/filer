@@ -55,6 +55,7 @@ const Editor = () => {
             onPaste={onPaste}
         >
             <h1>Filer</h1>
+            <h1>{time}</h1>
             <FileManager files={files} setFiles={setFiles} addFiles={addFiles} />
             <Settings setViews={setViews} setTime={setTime} setPassword={setPassword} />
         </div>
