@@ -1,12 +1,12 @@
 import React from 'react';
 import classes from "./Main.module.css";
-import FilePackList from "../components/FilePackList";
+import PackList from "./components/PackList";
 
 const Main = () => {
     return (
-        <div className={classes.mainPage}>
+        <div className={classes.main}>
             <h1>Filer</h1>
-            <FilePackList />
+            <PackList />
         </div>
     );
 };

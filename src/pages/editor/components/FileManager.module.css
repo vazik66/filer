@@ -1,0 +1,6 @@
+.fileManager {
+    flex-flow: column;
+    margin: 0 auto;
+    background-color: lightblue;
+    width: 50%;
+}
