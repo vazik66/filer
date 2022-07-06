@@ -17,6 +17,7 @@ const Editor = () => {
     const [files, setFiles] = useState([]);
     const [views, setViews] = useState(null);
     const [time, setTime] = useState(null);
+    const [password, setPassword] = useState(null);
 
     function addFiles(newFiles) {
         const fileNames = files.map(file => file.name);
@@ -55,7 +56,7 @@ const Editor = () => {
         >
             <h1>Filer</h1>
             <FileManager files={files} setFiles={setFiles} addFiles={addFiles} />
-            <Settings setViews={setViews} />
+            <Settings setViews={setViews} setTime={setTime} setPassword={setPassword} />
         </div>
     );
 };

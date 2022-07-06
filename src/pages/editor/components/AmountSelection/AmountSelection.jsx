@@ -3,24 +3,26 @@ import classes from "./AmountSelection.module.css";
 import AmountSelectionButton from "./AmountSelectionButton";
 import AmountSelectionInput from "./AmountSelectionInput";
 
-const AmountSelection = ({amounts, setChangedValue, input}) => {
+const AmountSelection = ({text, amounts, setValue, input, buttonStyle}) => {
     const minValue = Math.min(...Object.values(amounts));
     const [currentId, setCurrentId] = useState(0);
 
     function select(value, id) {
         if (value < minValue) return;
-        setChangedValue(value);
+        setValue(value);
         setCurrentId(id);
     }
 
     return (
         <div className={classes.amountSelection}>
+            {text}
             {Object.entries(amounts).map((item, i) =>
                 <AmountSelectionButton
                     id={i}
                     item={item}
                     select={select}
                     selected={i === currentId}
+                    buttonStyle={buttonStyle}
                 />)}
             {input && <AmountSelectionInput
                 id={-1}
