@@ -1,0 +1,19 @@
+Index: src/pages/editor/Editor.module.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>.editor {\r\n    display: flex;\r\n    flex-flow: column;\r\n    background-color: yellow;\r\n    width: 50%;\r\n    margin: auto;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/editor/Editor.module.css b/src/pages/editor/Editor.module.css
+--- a/src/pages/editor/Editor.module.css	(revision 3225d97bc22960da969610ec09dcb1485c78a421)
++++ b/src/pages/editor/Editor.module.css	(date 1657203738516)
+@@ -1,7 +1,6 @@
+ .editor {
+     display: flex;
+     flex-flow: column;
+-    background-color: yellow;
+     width: 50%;
+     margin: auto;
+ }
+\ No newline at end of file

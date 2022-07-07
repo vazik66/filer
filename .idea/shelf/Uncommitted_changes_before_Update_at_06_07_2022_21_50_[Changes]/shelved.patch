@@ -1,0 +1,322 @@
+Index: src/pages/editor/Editor.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {useState} from 'react';\r\nimport classes from \"./Editor.module.css\";\r\nimport FileManager from \"./components/FileManager\";\r\n\r\nconst filesInPackLimit = 5;\r\n\r\nfunction fileFromString(text) {\r\n    const currentTime = Date.now();\r\n    return new File([text],\r\n        `${currentTime}.txt`,\r\n        {type: 'text/plain', lastModified: currentTime}\r\n    );\r\n}\r\n\r\nconst Editor = () => {\r\n    const [files, setFiles] = useState([]);\r\n\r\n    function addFiles(newFiles) {\r\n        const fileNames = files.map(file => file.name);\r\n        const result = newFiles.filter(file => !fileNames.includes(file.name));\r\n        setFiles(files.concat(result).slice(0, filesInPackLimit));\r\n    }\r\n\r\n    function onDrop(e) {\r\n        e.preventDefault();\r\n        addFiles([...e.dataTransfer.files]);\r\n    }\r\n\r\n    function onDragOver(e) {\r\n        e.preventDefault();\r\n    }\r\n\r\n    function onPaste(e) {\r\n        const clipboardText = e.clipboardData.getData('Text');\r\n        if (clipboardText) {\r\n            addFiles([fileFromString(clipboardText)]);\r\n            return;\r\n        }\r\n        const clipboardItems = Object.values(e.clipboardData.items);\r\n        const newFiles = clipboardItems\r\n            .filter(item => item.kind === 'file')\r\n            .map(item => item.getAsFile());\r\n        addFiles(newFiles);\r\n    }\r\n\r\n    return (\r\n        <div\r\n            className={classes.editor}\r\n            onDrop={onDrop}\r\n            onDragOver={onDragOver}\r\n            onPaste={onPaste}\r\n        >\r\n            <h1>Filer</h1>\r\n            <FileManager files={files} setFiles={setFiles} addFiles={addFiles} />\r\n        </div>\r\n    );\r\n};\r\n\r\nexport default Editor;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/editor/Editor.jsx b/src/pages/editor/Editor.jsx
+--- a/src/pages/editor/Editor.jsx	(revision 97ed8b99de4dcf873962eb31e3fdc3e893cac07e)
++++ b/src/pages/editor/Editor.jsx	(date 1657101791277)
+@@ -1,6 +1,7 @@
+ import React, {useState} from 'react';
+ import classes from "./Editor.module.css";
+ import FileManager from "./components/FileManager";
++import Settings from "./components/Settings";
+ 
+ const filesInPackLimit = 5;
+ 
+@@ -14,6 +15,7 @@
+ 
+ const Editor = () => {
+     const [files, setFiles] = useState([]);
++    const [views, setViews] = useState(Number.MAX_SAFE_INTEGER);
+ 
+     function addFiles(newFiles) {
+         const fileNames = files.map(file => file.name);
+@@ -52,6 +54,7 @@
+         >
+             <h1>Filer</h1>
+             <FileManager files={files} setFiles={setFiles} addFiles={addFiles} />
++            <Settings setViews={setViews} />
+         </div>
+     );
+ };
+Index: src/pages/editor/Editor.module.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>.editor {\r\n    display: flex;\r\n    width: 100vw;\r\n    height: 100vh;\r\n    flex-flow: column;\r\n    background-color: yellow;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/editor/Editor.module.css b/src/pages/editor/Editor.module.css
+--- a/src/pages/editor/Editor.module.css	(revision 97ed8b99de4dcf873962eb31e3fdc3e893cac07e)
++++ b/src/pages/editor/Editor.module.css	(date 1657048894583)
+@@ -1,7 +1,7 @@
+ .editor {
+     display: flex;
+-    width: 100vw;
+-    height: 100vh;
+     flex-flow: column;
+     background-color: yellow;
++    width: 50%;
++    margin: auto;
+ }
+\ No newline at end of file
+Index: src/pages/editor/components/AmountSelection/AmountSelection.module.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/editor/components/AmountSelection/AmountSelection.module.css b/src/pages/editor/components/AmountSelection/AmountSelection.module.css
+new file mode 100644
+--- /dev/null	(date 1657125743175)
++++ b/src/pages/editor/components/AmountSelection/AmountSelection.module.css	(date 1657125743175)
+@@ -0,0 +1,21 @@
++.amountSelection {
++
++}
++
++.item {
++    margin: 10px;
++    border: 0;
++    box-sizing: border-box;
++    width: 50px;
++    height: 50px;
++    font-size: 25px;
++    outline: none;
++}
++
++.item:hover {
++    background-color: aqua;
++}
++
++.selected {
++    background-color: olivedrab;
++}
+\ No newline at end of file
+Index: src/pages/editor/components/FileManager.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from 'react';\r\nimport classes from \"./FileManager.module.css\";\r\nimport File from \"./File\";\r\nimport FileInput from \"./FileInput\";\r\n\r\nconst filesInPackLimit = 5;\r\n\r\nconst FileManager = ({files, setFiles, addFiles}) => {\r\n    return (\r\n        <div className={classes.fileManager}>\r\n            {files.map(file => <File file={file} files={files} setFiles={setFiles} />)}\r\n            {files.length < filesInPackLimit && <FileInput addFiles={addFiles} />}\r\n        </div>\r\n    );\r\n};\r\n\r\nexport default FileManager;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/editor/components/FileManager.jsx b/src/pages/editor/components/FileManager.jsx
+--- a/src/pages/editor/components/FileManager.jsx	(revision 97ed8b99de4dcf873962eb31e3fdc3e893cac07e)
++++ b/src/pages/editor/components/FileManager.jsx	(date 1657048586543)
+@@ -8,6 +8,7 @@
+ const FileManager = ({files, setFiles, addFiles}) => {
+     return (
+         <div className={classes.fileManager}>
++            <h2>File Manager</h2>
+             {files.map(file => <File file={file} files={files} setFiles={setFiles} />)}
+             {files.length < filesInPackLimit && <FileInput addFiles={addFiles} />}
+         </div>
+Index: README.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># Filer\r\n`npm start` to run project
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/README.md b/README.md
+--- a/README.md	(revision 97ed8b99de4dcf873962eb31e3fdc3e893cac07e)
++++ b/README.md	(date 1657054662161)
+@@ -1,2 +1,3 @@
+ # Filer
+-`npm start` to run project
+\ No newline at end of file
++`npm install`  
++`npm start`
+\ No newline at end of file
+Index: src/pages/editor/components/File.module.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>.file {\r\n    display: flex;\r\n    background-color: rebeccapurple;\r\n    margin-bottom: 20px;\r\n    width: 100%;\r\n    height: 90px;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/editor/components/File.module.css b/src/pages/editor/components/File.module.css
+--- a/src/pages/editor/components/File.module.css	(revision 97ed8b99de4dcf873962eb31e3fdc3e893cac07e)
++++ b/src/pages/editor/components/File.module.css	(date 1657048962005)
+@@ -1,7 +1,6 @@
+ .file {
+     display: flex;
+     background-color: rebeccapurple;
+-    margin-bottom: 20px;
+     width: 100%;
+     height: 90px;
+ }
+\ No newline at end of file
+Index: src/pages/editor/components/AmountSelection/AmountSelection.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/editor/components/AmountSelection/AmountSelection.jsx b/src/pages/editor/components/AmountSelection/AmountSelection.jsx
+new file mode 100644
+--- /dev/null	(date 1657125559346)
++++ b/src/pages/editor/components/AmountSelection/AmountSelection.jsx	(date 1657125559346)
+@@ -0,0 +1,35 @@
++import React, {useState} from 'react';
++import classes from "./AmountSelection.module.css";
++import AmountSelectionButton from "./AmountSelectionButton";
++import AmountSelectionInput from "./AmountSelectionInput";
++
++const AmountSelection = ({amounts, setChangedValue, input}) => {
++    const minValue = Math.min(...amounts);
++    const [currentId, setCurrentId] = useState(0);
++
++    function select(value, id) {
++        if (value < minValue) return;
++        setChangedValue(value);
++        setCurrentId(id);
++        console.log(value)
++        console.log(id)
++    }
++
++    return (
++        <div className={classes.amountSelection}>
++            {amounts.map((amount, i) => <AmountSelectionButton
++                id={i}
++                amount={amount}
++                select={select}
++                selected={i === currentId}
++            />)}
++            {input && <AmountSelectionInput
++                id={-1}
++                select={select}
++                selected={-1 === currentId}
++            />}
++        </div>
++    );
++};
++
++export default AmountSelection;
+\ No newline at end of file
+Index: src/pages/editor/components/Settings.module.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/editor/components/Settings.module.css b/src/pages/editor/components/Settings.module.css
+new file mode 100644
+--- /dev/null	(date 1657050126842)
++++ b/src/pages/editor/components/Settings.module.css	(date 1657050126842)
+@@ -0,0 +1,3 @@
++.settings {
++    background-color: lightblue;
++}
+\ No newline at end of file
+Index: src/pages/editor/components/Settings.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/editor/components/Settings.jsx b/src/pages/editor/components/Settings.jsx
+new file mode 100644
+--- /dev/null	(date 1657125743215)
++++ b/src/pages/editor/components/Settings.jsx	(date 1657125743215)
+@@ -0,0 +1,18 @@
++import React from 'react';
++import classes from "./Settings.module.css";
++import AmountSelection from "./AmountSelection/AmountSelection";
++
++const Settings = ({setViews}) => {
++    return (
++        <div className={classes.settings}>
++            <h2>Settings</h2>
++            <AmountSelection
++                amounts={[1, 5, 20, Number.MAX_SAFE_INTEGER]}
++                setChangedValue={setViews}
++                input
++            />
++        </div>
++    );
++};
++
++export default Settings;
+\ No newline at end of file
+Index: src/pages/editor/components/FileManager.module.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>.fileManager {\r\n    flex-flow: column;\r\n    margin: 0 auto;\r\n    background-color: lightblue;\r\n    width: 50%;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/editor/components/FileManager.module.css b/src/pages/editor/components/FileManager.module.css
+--- a/src/pages/editor/components/FileManager.module.css	(revision 97ed8b99de4dcf873962eb31e3fdc3e893cac07e)
++++ b/src/pages/editor/components/FileManager.module.css	(date 1657050281399)
+@@ -1,6 +1,7 @@
+ .fileManager {
+-    flex-flow: column;
+-    margin: 0 auto;
++    display: grid;
++    margin: 0 auto 60px auto;
+     background-color: lightblue;
+-    width: 50%;
++    width: 100%;
++    grid-gap: 30px;
+ }
+\ No newline at end of file
+Index: src/pages/editor/components/FileInput.module.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>.fileInput {\r\n    display: flex;\r\n    background-color: rebeccapurple;\r\n    margin-bottom: 20px;\r\n    width: 100%;\r\n    height: 90px;\r\n    cursor: pointer;\r\n    transition: .3s;\r\n}\r\n\r\n.fileInput:hover {\r\n    cursor: pointer;\r\n    transition: .3s;\r\n}\r\n\r\n.input {\r\n    display: none;\r\n}\r\n\r\n.text {\r\n    margin: auto;\r\n    padding: 0;\r\n    font-size: 30px;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/editor/components/FileInput.module.css b/src/pages/editor/components/FileInput.module.css
+--- a/src/pages/editor/components/FileInput.module.css	(revision 97ed8b99de4dcf873962eb31e3fdc3e893cac07e)
++++ b/src/pages/editor/components/FileInput.module.css	(date 1657048845385)
+@@ -1,7 +1,6 @@
+ .fileInput {
+     display: flex;
+     background-color: rebeccapurple;
+-    margin-bottom: 20px;
+     width: 100%;
+     height: 90px;
+     cursor: pointer;
+Index: src/pages/editor/components/AmountSelection/AmountSelectionButton.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/editor/components/AmountSelection/AmountSelectionButton.jsx b/src/pages/editor/components/AmountSelection/AmountSelectionButton.jsx
+new file mode 100644
+--- /dev/null	(date 1657125743201)
++++ b/src/pages/editor/components/AmountSelection/AmountSelectionButton.jsx	(date 1657125743201)
+@@ -0,0 +1,15 @@
++import React from 'react';
++import classes from "./AmountSelection.module.css";
++
++const AmountSelectionButton = ({id, amount, select, selected}) => {
++    return (
++        <button
++            className={classes.item + ' ' + (selected ? classes.selected : '')}
++            onClick={() => select(amount, id)}
++        >
++            {amount === Number.MAX_SAFE_INTEGER ? "inf" : amount}
++        </button>
++    );
++};
++
++export default AmountSelectionButton;
+\ No newline at end of file
+Index: src/pages/editor/components/AmountSelection/AmountSelectionInput.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/editor/components/AmountSelection/AmountSelectionInput.jsx b/src/pages/editor/components/AmountSelection/AmountSelectionInput.jsx
+new file mode 100644
+--- /dev/null	(date 1657125743245)
++++ b/src/pages/editor/components/AmountSelection/AmountSelectionInput.jsx	(date 1657125743245)
+@@ -0,0 +1,15 @@
++import React from 'react';
++import classes from "./AmountSelection.module.css";
++
++const AmountSelectionInput = ({id, select, selected}) => {
++    return (
++        <input
++            className={classes.item + ' ' + (selected ? classes.selected : '')}
++            min="1"
++            type="number"
++            onChange={e => select(e.target.value, id)}
++        />
++    );
++};
++
++export default AmountSelectionInput;
+\ No newline at end of file

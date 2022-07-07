@@ -1,7 +1,6 @@
 .editor {
     display: flex;
     flex-flow: column;
-    background-color: yellow;
     width: 50%;
     margin: auto;
 }
