@@ -13,6 +13,7 @@ const AmountSelection = ({text, amounts, setValue, input, buttonStyle}) => {
             {text}
             {amounts.map((item) =>
                 <button
+                    key={item}
                     style={buttonStyle}
                     className={classes.item}
                     onClick={() => select(item)}

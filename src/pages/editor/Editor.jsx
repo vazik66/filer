@@ -16,13 +16,6 @@ function fileFromString(text) {
 }
 
 const Editor = () => {
-    function distributeResponse({files, views, time, password}) {
-        setFiles(files);
-        setViews(views);
-        setTime(time);
-        setPassword(password);
-    }
-
     useEffect(() => {
         const fetchData = async () => {
             // const result = await axios(
@@ -37,7 +30,10 @@ const Editor = () => {
             //     time: 1657806540546,
             //     password: 'xx',
             // };
-            // distributeResponse(result);
+            // setFiles(files);
+            // setViews(views);
+            // setTime(time);
+            // setPassword(password);
         };
         fetchData();
     }, []);
@@ -49,8 +45,18 @@ const Editor = () => {
 
     function addFiles(newFiles) {
         const fileNames = files.map(file => file.name);
-        const result = newFiles.filter(file => !fileNames.includes(file.name));
+        const result = newFiles.filter(file =>
+            !fileNames.includes(file.name) && notADirectory(file));
         setFiles(files.concat(result).slice(0, filesInPackLimit));
+    }
+
+    function notADirectory(maybeFile) {
+        if (maybeFile.type !== '') return true;
+        const reader = new FileReader()
+        reader.onloadend = () => !(reader.error &&
+            (reader.error.name === 'NotFoundError' ||
+                reader.error.name === 'NotReadableError'))
+        reader.readAsBinaryString(maybeFile)
     }
 
     function onDrop(e) {
