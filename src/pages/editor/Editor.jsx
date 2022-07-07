@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import classes from "./Editor.module.css";
 import FileManager from "./components/FileManager";
 import Settings from "./components/Settings";
 import Countdown from "react-countdown";
+import axios, {post} from "axios";
 
 const filesInPackLimit = 5;
 
@@ -15,6 +16,32 @@ function fileFromString(text) {
 }
 
 const Editor = () => {
+    function distributeResponse({files, views, time, password}) {
+        setFiles(files);
+        setViews(views);
+        setTime(time);
+        setPassword(password);
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            // const result = await axios(
+            //     'https://jsonplaceholder.typicode.com/todos/1'
+            // );
+            // setPackData(result.data);
+            // const result = {
+            //     user: 'aaaaa',
+            //     packId: 'bbbbb',
+            //     files: [fileFromString('clipboardText')],
+            //     views: 15,
+            //     time: 1657806540546,
+            //     password: 'xx',
+            // };
+            // distributeResponse(result);
+        };
+        fetchData();
+    }, []);
+
     const [files, setFiles] = useState([]);
     const [views, setViews] = useState(null);
     const [time, setTime] = useState(null);
@@ -56,6 +83,17 @@ const Editor = () => {
         );
     };
 
+    function submit() {
+        post('/', {
+            user: 'tt',
+            packId: 'ff',
+            files: files,
+            views: views,
+            time: time,
+            password: password
+        });
+    }
+
     return (
         <div
             className={classes.editor}
@@ -66,12 +104,12 @@ const Editor = () => {
             <h1>Filer</h1>
             <h1>
                 Time left&nbsp;
-                <Countdown date={time} renderer={renderer} />
+                {time && <Countdown date={time} renderer={renderer} autoStart />}
             </h1>
             <h1>Views left {views < 0 ? "inf" : views}</h1>
             <FileManager files={files} setFiles={setFiles} addFiles={addFiles} />
             <Settings setViews={setViews} setTime={setTime} setPassword={setPassword} />
-            <button>Save</button>
+            <button onClick={submit}>Save</button>
         </div>
     );
 };

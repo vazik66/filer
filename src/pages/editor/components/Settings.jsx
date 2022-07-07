@@ -9,7 +9,8 @@ const Settings = ({setViews, setTime, setPassword}) => {
 
     function resetDate(duration) {
         const date = new Date();
-        date.add(+(duration.split(' ')[0])).day();
+        const amount = +(duration.split(' ')[0]);
+        date.add(amount).day();
         setTime(date.getTime());
     }
 
