@@ -1,6 +1,6 @@
 import React from 'react';
-import classes from "./Settings.module.css";
-import AmountSelection from "./AmountSelection";
+import classes from './Settings.module.css';
+import AmountSelection from './AmountSelection';
 import 'datejs';
 
 const Settings = ({setViews, setTime, setPassword}) => {

@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import classes from "./AmountSelection.module.css";
+import classes from './AmountSelection.module.css';
 
 const AmountSelection = ({text, amounts, setValue, input, buttonStyle}) => {
     useEffect(() => setValue(amounts[0]), []);

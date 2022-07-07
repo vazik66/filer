@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import classes from "./Editor.module.css";
-import FileManager from "./components/FileManager";
-import Settings from "./components/Settings";
-import Countdown from "react-countdown";
-import axios, {post} from "axios";
+import classes from './Editor.module.css';
+import FileManager from './components/FileManager';
+import Settings from './components/Settings';
+import Countdown from 'react-countdown';
+import axios, {post} from 'axios';
+import JSZip from 'jszip';
+import {saveAs} from 'file-saver';
 
 const filesInPackLimit = 5;
 
@@ -90,14 +92,20 @@ const Editor = () => {
     };
 
     function submit() {
-        post('/', {
-            user: 'tt',
-            packId: 'ff',
-            files: files,
-            views: views,
-            time: time,
-            password: password
-        });
+        // const newPackData = {
+        //     user: 'tt',
+        //     packId: 'ff',
+        //     files: files,
+        //     views: views,
+        //     time: time,
+        //     password: password
+        // };
+        // post('/', newPackData);
+
+        const zip = new JSZip();
+        files.forEach(file => zip.file(file.name, file))
+        zip.generateAsync({type:'blob'}).then(content =>
+            saveAs(content, 'example.zip'));
     }
 
     return (

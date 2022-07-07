@@ -1,5 +1,5 @@
 import React from 'react';
-import classes from "./File.module.css";
+import classes from './File.module.css';
 
 const File = ({file, files, setFiles}) => {
     function deleteFile() {
