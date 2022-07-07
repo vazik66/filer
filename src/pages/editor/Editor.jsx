@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import classes from "./Editor.module.css";
 import FileManager from "./components/FileManager";
 import Settings from "./components/Settings";
+import Countdown from "react-countdown";
 
 const filesInPackLimit = 5;
 
@@ -47,6 +48,14 @@ const Editor = () => {
         addFiles(newFiles);
     }
 
+    const renderer = ({days, hours}) => {
+        return (
+            <span>
+                {days} days {hours} hours
+            </span>
+        );
+    };
+
     return (
         <div
             className={classes.editor}
@@ -55,9 +64,14 @@ const Editor = () => {
             onPaste={onPaste}
         >
             <h1>Filer</h1>
-            <h1>{time}</h1>
+            <h1>
+                Time left&nbsp;
+                <Countdown date={time} renderer={renderer} />
+            </h1>
+            <h1>Views left {views < 0 ? "inf" : views}</h1>
             <FileManager files={files} setFiles={setFiles} addFiles={addFiles} />
             <Settings setViews={setViews} setTime={setTime} setPassword={setPassword} />
+            <button>Save</button>
         </div>
     );
 };

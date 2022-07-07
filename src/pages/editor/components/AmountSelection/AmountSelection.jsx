@@ -1,33 +1,29 @@
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import classes from "./AmountSelection.module.css";
-import AmountSelectionButton from "./AmountSelectionButton";
-import AmountSelectionInput from "./AmountSelectionInput";
 
 const AmountSelection = ({text, amounts, setValue, input, buttonStyle}) => {
-    const minValue = Math.min(...Object.values(amounts));
-    const [currentId, setCurrentId] = useState(0);
+    useEffect(() => setValue(amounts[0]), []);
 
-    function select(value, id) {
-        if (value < minValue) return;
-        setValue(value);
-        setCurrentId(id);
+    function select(value) {
+        if (value) setValue(value);
     }
 
     return (
         <div className={classes.amountSelection}>
             {text}
-            {Object.entries(amounts).map((item, i) =>
-                <AmountSelectionButton
-                    id={i}
-                    item={item}
-                    select={select}
-                    selected={i === currentId}
-                    buttonStyle={buttonStyle}
-                />)}
-            {input && <AmountSelectionInput
-                id={-1}
-                select={select}
-                selected={-1 === currentId}
+            {amounts.map((item) =>
+                <button
+                    style={buttonStyle}
+                    className={classes.item}
+                    onClick={() => select(item)}
+                >
+                    {item < 0 ? "inf" : item}
+                </button>)}
+            {input && <input
+                className={classes.item}
+                min="1"
+                type="number"
+                onChange={e => select(e.target.value)}
             />}
         </div>
     );

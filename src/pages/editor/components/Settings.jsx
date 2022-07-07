@@ -4,14 +4,13 @@ import AmountSelection from "./AmountSelection/AmountSelection";
 import 'datejs';
 
 const Settings = ({setViews, setTime, setPassword}) => {
-    const views = {1: 1, 5: 5, 20: 20, inf: Number.MAX_SAFE_INTEGER};
-    const times = {'1 week': '1 week', '2 weeks': '2 weeks', '1 month': '1 month'};
+    const views = [1, 5, 20, -1];
+    const times = ['7 days', '14 days', '30 days'];
 
     function resetDate(duration) {
-        const today = new Date();
-        if (duration === '1 week') setTime(today.add(7).day().toString());
-        else if (duration === '2 weeks') setTime(today.add(14).day().toString());
-        else if (duration === '1 month') setTime(today.add(1).month().toString());
+        const date = new Date();
+        date.add(+(duration.split(' ')[0])).day();
+        setTime(date.getTime());
     }
 
     return (
@@ -32,8 +31,7 @@ const Settings = ({setViews, setTime, setPassword}) => {
             Password
             <input
                 className={classes.item}
-                type="password"
-                pattern="[0-9a-zA-Z\W+]{8,16}"
+                pattern="[0-9a-zA-Z\W+]"
                 onChange={e => setPassword(e.target.value)}
                 onFocus={e => e.target.value = ''}
             />
