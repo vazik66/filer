@@ -157,6 +157,13 @@ const Editor = () => {
                 setPassword={setPassword}
                 show={!settingsClosed}
             />
+            <a
+                className={classes.link}
+                href="https://github.com/vazik66/filer" 
+                target="_blank" rel="noreferrer"
+            >
+                github.com/vazik66/filer
+            </a>
         </div>
     );
 };
