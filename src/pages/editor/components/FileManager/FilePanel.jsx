@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import classes from './FilePanel.module.css';
 import File from './File';
 import FileButton from './FileButton';
@@ -9,7 +9,6 @@ import svgDelete from '../../../../icons/delete.svg';
 
 const FilePanel = ({file, files, setFiles}) => {
     const [currentFile, setCurrentFile] = useState(file);
-    useEffect(() => console.log(currentFile.name), [currentFile]);
 
     const deleteFile = () => setFiles(files.filter(element => element !== file));
     const downloadFile = () => saveAs(file, file.name);
