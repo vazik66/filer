@@ -1,0 +1,11 @@
+.nameInput {
+    display: flex;
+    font-family: 'Roboto Mono', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: #2F2F2F;
+    padding: 0;
+    margin: auto 15px auto 0;
+    border: 0;
+    outline: none;
+}

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import classes from "./File.module.css";
+import classes from './FilenameInput.module.css';
 
 const clearFileType = fileType => fileType.split('/')[1];
 const clearFilename = fileName => fileName.split('.').slice(0, -1).join('.');

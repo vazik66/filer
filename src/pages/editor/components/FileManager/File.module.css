@@ -4,25 +4,12 @@
 
 .type {
     display: flex;
+    margin: auto 0;
+    padding: 6px 8px 8px 8px;
+    border-radius: 8px;
+    background-color: #EBEBEB;
     font-family: 'Roboto Mono', sans-serif;
-    color: #5b5b5b;
     font-weight: 700;
     font-size: 16px;
-    margin: auto 0;
-    background-color: #EBEBEB;
-    border-radius: 8px;
-    padding: 6px 8px 8px 8px;
-}
-
-.nameInput {
-    display: flex;
-    font-family: 'Roboto Mono', sans-serif;
-    font-weight: 700;
-    font-size: 26px;
-    color: #2F2F2F;
-    padding: 0;
-    margin: auto 15px auto 0;
-    border: 0;
-    outline: none;
-    background-color: darkorange;
+    color: #5b5b5b;
 }
