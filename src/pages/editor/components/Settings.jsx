@@ -3,7 +3,7 @@ import classes from './Settings.module.css';
 import AmountSelection from './AmountSelection';
 import 'datejs';
 
-const Settings = ({setViews, setTime, setPassword}) => {
+const Settings = ({setViews, setTime, setPassword, show}) => {
     const views = [1, 5, 20, -1];
     const times = ['7 days', '14 days', '30 days'];
 
@@ -15,26 +15,27 @@ const Settings = ({setViews, setTime, setPassword}) => {
     }
 
     return (
-        <div className={classes.settings}>
-            <h2>Settings</h2>
+        <div
+            className={classes.settings}
+            style={{display: show ? "flex" : "none"}}
+        >
             <AmountSelection
-                text="Views amount"
+                text="Set views amount"
                 amounts={views}
                 setValue={setViews}
                 input
             />
             <AmountSelection
-                text="Time duration"
+                text="Set time duration"
                 amounts={times}
                 setValue={duration => resetDate(duration)}
-                buttonStyle={{width: 'fit-content', padding: '0 15px'}}
+                buttonStyle={{width: 'fit-content', padding: '0 20px'}}
             />
-            Password
+            <h3 className={classes.h3}>Password</h3>
             <input
-                className={classes.item}
-                pattern="[0-9a-zA-Z\W+]"
+                className={classes.password}
                 onChange={e => setPassword(e.target.value)}
-                onFocus={e => e.target.value = ''}
+                placeholder="Not required"
             />
         </div>
     );

@@ -1,19 +1,14 @@
 .amountSelection {
-
+    margin-bottom: 40px;
 }
 
-.item {
-    margin: 10px;
-    border: 0;
-    box-sizing: border-box;
-    width: 50px;
-    height: 50px;
-    font-size: 25px;
-    outline: none;
-}
-
-.item:hover {
-    background-color: aqua;
+.h3 {
+    font-family: 'Roboto Mono', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    color: #2F2F2F;
+    padding: 0;
+    margin: 0 0 20px 0;
 }
 
 .selected {

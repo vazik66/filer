@@ -4,7 +4,15 @@
     display: flex;
     flex-flow: column;
     width: 45%;
-    margin: 30px auto;
+    margin: 30px auto 60px auto;
+    position: relative;
+}
+
+.data {
+    display: flex;
+    flex-flow: column;
+    gap: 10px;
+    margin: 10px auto 30px 0;
 }
 
 .h1 {
@@ -13,7 +21,7 @@
     font-size: 64px;
     color: #2F2F2F;
     padding: 0;
-    margin: 0 0 20px 0;
+    margin: 0;
 }
 
 .h2 {
@@ -22,5 +30,13 @@
     font-size: 32px;
     color: #2F2F2F;
     padding: 0;
-    margin: 0 0 10px 0;
+    margin: 0;
+}
+
+.serviceButtons {
+    display: flex;
+    position: absolute;
+    right: 0;
+    top: 15px;
+    gap: 15px;
 }

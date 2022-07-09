@@ -1,0 +1,15 @@
+.button {
+    border: none;
+    width: 60px;
+    height: 60px;
+    background-color: #FFF;
+    border-radius: 16px;
+}
+
+.button:hover {
+    cursor: pointer;
+}
+
+.img {
+    margin: auto;
+}

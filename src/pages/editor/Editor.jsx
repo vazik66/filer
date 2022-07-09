@@ -7,6 +7,11 @@ import axios, {post} from 'axios';
 import JSZip from 'jszip';
 import {saveAs} from 'file-saver';
 
+import svgStatus from '../../icons/status.svg';
+import svgSaveAll from '../../icons/saveAll.svg';
+import svgSettings from '../../icons/settings.svg';
+import IconButton from "./components/IconButton";
+
 const filesInPackLimit = 5;
 
 function fileFromString(text) {
@@ -50,6 +55,8 @@ const Editor = () => {
     const [views, setViews] = useState(null);
     const [time, setTime] = useState(null);
     const [password, setPassword] = useState(null);
+
+    const [settingsClosed, setSettingsClosed] = useState(true);
 
     function addFiles(newFiles) {
         const fileNames = files.map(file => file.name);
@@ -114,6 +121,10 @@ const Editor = () => {
             saveAs(content, 'example.zip'));
     }
 
+    function toggleSettings() {
+        setSettingsClosed(!settingsClosed);
+    }
+
     return (
         <div
             className={classes.editor}
@@ -122,13 +133,30 @@ const Editor = () => {
             onPaste={onPaste}
         >
             <h1 className={classes.h1}>Filer</h1>
-            <h2 className={classes.h2}>Views: {views < 0 ? "inf" : views}</h2>
-            <h2 className={classes.h2}>
-                Time left:&nbsp;
-                {time && <Countdown date={time} renderer={renderer} autoStart />}
-            </h2>
-            <FileManager files={files} setFiles={setFiles} addFiles={addFiles} />
-            <Settings setViews={setViews} setTime={setTime} setPassword={setPassword} />
+            <div className={classes.data}>
+                <h2 className={classes.h2}>Views: {views < 0 ? "inf" : views}</h2>
+                <h2 className={classes.h2}>
+                    Time left:&nbsp;
+                    {time && <Countdown date={time} renderer={renderer} autoStart />}
+                </h2>
+            </div>
+            <div className={classes.serviceButtons}>
+                <IconButton image={svgStatus} show />
+                <IconButton image={svgSaveAll} show={settingsClosed} />
+                <IconButton image={svgSettings} onClick={toggleSettings} show />
+            </div>
+            <FileManager
+                files={files}
+                setFiles={setFiles}
+                addFiles={addFiles}
+                show={settingsClosed}
+            />
+            <Settings
+                setViews={setViews}
+                setTime={setTime}
+                setPassword={setPassword}
+                show={!settingsClosed}
+            />
         </div>
     );
 };
