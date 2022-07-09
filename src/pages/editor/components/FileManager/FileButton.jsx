@@ -1,16 +1,16 @@
 import React from 'react';
-import classes from './IconButton.module.css';
+import classes from './FileButton.module.css';
 
-const IconButton = ({image, onClick, style, show}) => {
+const FileButton = ({image, onClick, style}) => {
     return (
         <button
             className={classes.button}
-            style={{...style, ...{display: show ? "flex" : "none"}}}
             onClick={onClick}
+            style={style}
         >
             <img className={classes.img} src={image} alt="" draggable="false" />
         </button>
     );
 };
 
-export default IconButton;
+export default FileButton;

@@ -1,0 +1,18 @@
+.button {
+    display: flex;
+    border: none;
+    width: 50px;
+    height: 50px;
+    background: none;
+    border-radius: 8px;
+}
+
+.button:hover {
+    cursor: pointer;
+    background: #EBEBEB;
+    transition: .3s;
+}
+
+.img {
+    margin: auto;
+}

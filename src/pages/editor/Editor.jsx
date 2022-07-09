@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import classes from './Editor.module.css';
-import FileManager from './components/FileManager';
+import FileManager from './components/FileManager/FileManager';
 import Settings from './components/Settings';
 import Countdown from 'react-countdown';
 import axios, {post} from 'axios';
@@ -134,7 +134,7 @@ const Editor = () => {
         >
             <h1 className={classes.h1}>Filer</h1>
             <div className={classes.data}>
-                <h2 className={classes.h2}>Views: {views < 0 ? "inf" : views}</h2>
+                <h2 className={classes.h2}>Views: {views < 0 ? "∞" : views}</h2>
                 <h2 className={classes.h2}>
                     Time left:&nbsp;
                     {time && <Countdown date={time} renderer={renderer} autoStart />}
@@ -143,7 +143,12 @@ const Editor = () => {
             <div className={classes.serviceButtons}>
                 <IconButton image={svgStatus} show />
                 <IconButton image={svgSaveAll} show={settingsClosed} />
-                <IconButton image={svgSettings} onClick={toggleSettings} show />
+                <IconButton
+                    image={svgSettings}
+                    onClick={toggleSettings}
+                    style={{backgroundColor: settingsClosed ? "" : "#999"}}
+                    show
+                />
             </div>
             <FileManager
                 files={files}
