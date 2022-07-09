@@ -11,7 +11,7 @@ const FileInput = ({addFiles}) => {
                 multiple
             />
             <div className={classes.text}>
-                Click to choose images, drag or paste them here
+                Click to add files or paste them
             </div>
         </label>
     );

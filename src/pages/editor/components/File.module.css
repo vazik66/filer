@@ -1,6 +1,46 @@
 .file {
     display: flex;
-    background-color: rebeccapurple;
+    background-color: #FFF;
+    border-radius: 16px;
     width: 100%;
-    height: 90px;
+    height: 80px;
+}
+
+.text {
+    font-family: 'Roboto Mono', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: #2F2F2F;
+    padding: 0;
+    margin: auto 0;
+}
+
+.save {
+    display: flex;
+    margin: auto 15px;
+    border: none;
+    width: 50px;
+    height: 50px;
+    background: none;
+    border-radius: 8px;
+}
+
+.delete {
+    display: flex;
+    margin: auto 15px auto auto;
+    border: none;
+    width: 50px;
+    height: 50px;
+    background: none;
+    border-radius: 8px;
+}
+
+.save:hover, .delete:hover {
+    cursor: pointer;
+    background: #EBEBEB;
+    transition: .3s;
+}
+
+.img {
+    margin: auto;
 }

@@ -1,6 +1,0 @@
-.idea/
-__pycache__/
-venv/
-storage/*.*
-storage/tmp/*.*
-database.db

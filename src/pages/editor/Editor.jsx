@@ -18,24 +18,30 @@ function fileFromString(text) {
 }
 
 const Editor = () => {
+    async function unzip(file) {
+        const zipper = new JSZip();
+        return await zipper.loadAsync(file);
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             // const result = await axios(
             //     'https://jsonplaceholder.typicode.com/todos/1'
             // );
             // setPackData(result.data);
+            // const zip = new JSZip();
             // const result = {
             //     user: 'aaaaa',
             //     packId: 'bbbbb',
-            //     files: [fileFromString('clipboardText')],
+            //     file: zip.file('adaw.txt', fileFromString('clipboardText')),
             //     views: 15,
             //     time: 1657806540546,
             //     password: 'xx',
             // };
-            // setFiles(files);
-            // setViews(views);
-            // setTime(time);
-            // setPassword(password);
+            // if (result.file) setFiles([unzip(result.file)]);
+            // if (result.views) setViews(views);
+            // if (result.time) setTime(time);
+            // if (result.password) setPassword(password);
         };
         fetchData();
     }, []);
@@ -91,7 +97,7 @@ const Editor = () => {
         );
     };
 
-    function submit() {
+    function submitChanges() {
         // const newPackData = {
         //     user: 'tt',
         //     packId: 'ff',
@@ -115,15 +121,14 @@ const Editor = () => {
             onDragOver={onDragOver}
             onPaste={onPaste}
         >
-            <h1>Filer</h1>
-            <h1>
-                Time left&nbsp;
+            <h1 className={classes.h1}>Filer</h1>
+            <h2 className={classes.h2}>Views: {views < 0 ? "inf" : views}</h2>
+            <h2 className={classes.h2}>
+                Time left:&nbsp;
                 {time && <Countdown date={time} renderer={renderer} autoStart />}
-            </h1>
-            <h1>Views left {views < 0 ? "inf" : views}</h1>
+            </h2>
             <FileManager files={files} setFiles={setFiles} addFiles={addFiles} />
             <Settings setViews={setViews} setTime={setTime} setPassword={setPassword} />
-            <button onClick={submit}>Save</button>
         </div>
     );
 };

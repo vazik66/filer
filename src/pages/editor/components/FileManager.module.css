@@ -1,7 +1,6 @@
 .fileManager {
     display: grid;
-    margin: 0 auto 60px auto;
-    background-color: lightblue;
+    margin: 30px auto 60px auto;
     width: 100%;
-    grid-gap: 30px;
+    grid-gap: 20px;
 }

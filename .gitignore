@@ -4,6 +4,12 @@
 /node_modules
 /.pnp
 .pnp.js
+.idea/
+__pycache__/
+venv/
+storage/*.*
+storage/tmp/*.*
+database.db
 
 # testing
 /coverage
