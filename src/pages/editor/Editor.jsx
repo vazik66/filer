@@ -96,13 +96,7 @@ const Editor = () => {
         addFiles(newFiles);
     }
 
-    const renderer = ({days, hours}) => {
-        return (
-            <span>
-                {days} days {hours} hours
-            </span>
-        );
-    };
+    const renderer = ({days, hours}) => <span>{days} days {hours} hours</span>;
 
     function submitChanges() {
         // const newPackData = {
@@ -121,8 +115,14 @@ const Editor = () => {
             saveAs(content, 'example.zip'));
     }
 
-    function toggleSettings() {
-        setSettingsClosed(!settingsClosed);
+    const toggleSettings = () => setSettingsClosed(!settingsClosed);
+
+    function downloadAllFiles() {
+        if (!files.length) return;
+        const zip = new JSZip();
+        files.forEach(file => zip.file(file.name, file))
+        zip.generateAsync({type:'blob'}).then(content =>
+            saveAs(content, 'filer.zip'));
     }
 
     return (
@@ -142,7 +142,11 @@ const Editor = () => {
             </div>
             <div className={classes.serviceButtons}>
                 <IconButton image={svgStatus} show />
-                <IconButton image={svgSaveAll} show={settingsClosed} />
+                <IconButton
+                    image={svgSaveAll}
+                    show={settingsClosed}
+                    onClick={downloadAllFiles}
+                />
                 <IconButton
                     image={svgSettings}
                     onClick={toggleSettings}

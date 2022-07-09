@@ -2,13 +2,13 @@ import React from 'react';
 import classes from './File.module.css';
 import FilenameInput from './FilenameInput';
 
-const clearFileType = fileType => fileType.split('/')[1];
+const getFileType = fileName => fileName.split('.').pop();
 
 const File = ({file, setFile}) => {
     return (
         <div className={classes.file}>
             <FilenameInput file={file} setFile={setFile} />
-            <div className={classes.type}>{clearFileType(file.type)}</div>
+            <div className={classes.type}>{getFileType(file.name)}</div>
         </div>
     );
 };

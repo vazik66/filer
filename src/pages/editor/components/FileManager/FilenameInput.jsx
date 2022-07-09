@@ -1,17 +1,18 @@
 import React, {useState} from 'react';
 import classes from './FilenameInput.module.css';
 
-const clearFileType = fileType => fileType.split('/')[1];
+const maxInputWidth = 30;
+
 const clearFilename = fileName => fileName.split('.').slice(0, -1).join('.');
+const getFileType = fileName => fileName.split('.').pop();
 
 const FilenameInput = ({file, setFile}) => {
     const [width, setWidth] = useState(clearFilename(file.name).length);
 
     const changeFilename = e => {
-        const name = e.target.value + '.' + clearFileType(file.type);
-        const fileCopy = new File([file], name, {type: file.type});
-        setFile(fileCopy);
-        setWidth(clearFilename(name).length);
+        const name = e.target.value + '.' + getFileType(file.name);
+        setFile(new File([file], name, {type: file.type}));
+        setWidth(Math.min(maxInputWidth, clearFilename(name).length));
     };
 
     return (

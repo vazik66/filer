@@ -11,7 +11,11 @@ const FileManager = ({files, setFiles, addFiles, show}) => {
             className={classes.fileManager}
             style={{display: show ? "flex" : "none"}}
         >
-            {files.map(file => <FilePanel file={file} files={files} setFiles={setFiles} />)}
+            {files.map(file => <FilePanel
+                file={file}
+                files={files}
+                setFiles={setFiles}
+            />)}
             {files.length < filesInPackLimit && <FileInput addFiles={addFiles} />}
         </div>
     );
