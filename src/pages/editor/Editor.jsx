@@ -21,6 +21,7 @@ function fileFromString(text) {
         {type: 'text/plain', lastModified: currentTime}
     );
 }
+const isDirectory = maybeFile => !maybeFile.type && maybeFile.size % 4096 === 0;
 
 const Editor = () => {
     async function unzip(file) {
@@ -61,17 +62,8 @@ const Editor = () => {
     function addFiles(newFiles) {
         const fileNames = files.map(file => file.name);
         const result = newFiles.filter(file =>
-            !fileNames.includes(file.name) && notADirectory(file));
+            !fileNames.includes(file.name) && !isDirectory(file));
         setFiles(files.concat(result).slice(0, filesInPackLimit));
-    }
-
-    function notADirectory(maybeFile) {
-        if (maybeFile.type !== '') return true;
-        const reader = new FileReader()
-        reader.onloadend = () => !(reader.error &&
-            (reader.error.name === 'NotFoundError' ||
-                reader.error.name === 'NotReadableError'))
-        reader.readAsBinaryString(maybeFile)
     }
 
     function onDrop(e) {
