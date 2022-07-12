@@ -1,34 +1,36 @@
 import React, {useEffect, useState} from 'react';
 import classes from './FilePanel.module.css';
-import File from './File';
-import FileButton from './FileButton';
 import {saveAs} from 'file-saver';
-import svgSave from '../../../../icons/save.svg';
-import svgDelete from '../../../../icons/delete.svg';
+import FileHeader from './FileHeader/FileHeader';
+import FileDescription from './FileDescription/FileDescription';
 
 const FilePanel = ({file, files, setFiles}) => {
     const [currentFile, setCurrentFile] = useState(file);
+    const [description, setDescription] = useState(false);
 
     useEffect(() => {
         setFiles(getFilesExceptOne().concat(currentFile));
     }, [currentFile]);
 
-    const deleteFile = () => setFiles(getFilesExceptOne());
-    const downloadFile = () => saveAs(currentFile, currentFile.name);
     const getFilesExceptOne = () => files.filter(element => element !== file);
+
+    const methods = {
+        downloadFile: () => saveAs(currentFile, currentFile.name),
+        toggleDescription: () => setDescription(!description),
+        deleteFile: () => setFiles(getFilesExceptOne()),
+    };
 
     return (
         <div className={classes.filePanel}>
-            <FileButton
-                image={svgSave}
-                onClick={downloadFile}
-                style={{margin: "auto 15px auto 0"}}
+            <FileHeader
+                methods={methods}
+                currentFile={currentFile}
+                setCurrentFile={setCurrentFile}
             />
-            <File file={currentFile} setFile={setCurrentFile} />
-            <FileButton
-                image={svgDelete}
-                onClick={deleteFile}
-                style={{margin: "auto 0 auto auto"}}
+            <FileDescription
+                file={currentFile}
+                type={currentFile.type}
+                show={description}
             />
         </div>
     );

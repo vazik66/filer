@@ -1,0 +1,12 @@
+.description {
+    padding: 25px;
+    background-color: #EBEBEB;
+    border-radius: 8px;
+    font-family: 'Roboto Mono', sans-serif;
+    font-weight: 500;
+    line-height: 30px;
+    font-size: 20px;
+    color: #2F2F2F;
+    word-break: break-word;
+    margin: 15px 0 0 0;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './FileManager.module.css';
 import FilePanel from './FilePanel';
-import FileInput from './FileInput';
+import FileInput from './FileHeader/FileInput';
 
 const filesInPackLimit = 5;
 

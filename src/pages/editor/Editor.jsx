@@ -77,15 +77,14 @@ const Editor = () => {
 
     function onPaste(e) {
         const clipboardText = e.clipboardData.getData('Text');
-        if (clipboardText) {
-            addFiles([fileFromString(clipboardText)]);
-            return;
+        if (clipboardText) addFiles([fileFromString(clipboardText)]);
+        else {
+            const clipboardItems = Object.values(e.clipboardData.items);
+            const newFiles = clipboardItems
+                .filter(item => item.kind === 'file')
+                .map(item => item.getAsFile());
+            addFiles(newFiles);
         }
-        const clipboardItems = Object.values(e.clipboardData.items);
-        const newFiles = clipboardItems
-            .filter(item => item.kind === 'file')
-            .map(item => item.getAsFile());
-        addFiles(newFiles);
     }
 
     const renderer = ({days, hours}) => <span>{days} days {hours} hours</span>;
