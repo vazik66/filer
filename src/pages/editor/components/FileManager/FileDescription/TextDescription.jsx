@@ -11,7 +11,9 @@ const TextDescription = ({file}) => {
     });
 
     return (
-        <p className={classes.textDescription}>{data}</p>
+        <div className={classes.textDescription}>
+            {data}
+        </div>
     );
 };
 
