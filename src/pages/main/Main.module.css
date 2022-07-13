@@ -1,23 +1,4 @@
-body {
-    display: flex;
-    background-color: #EBEBEB;
-    margin: 0;
-    padding: 0;
-    transition: .3s;
-    overflow-y: scroll;
-}
 
-body::-webkit-scrollbar {
-    width: 10px;
-}
-
-body::-webkit-scrollbar-thumb {
-    background: #2F2F2F;
-}
-
-body::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
 
 
 /*h1 {*/

@@ -123,7 +123,7 @@ const Editor = () => {
             onDragOver={onDragOver}
             onPaste={onPaste}
         >
-            <h1 className={classes.h1}>Filer</h1>
+            <a className={classes.h1} href="/">Filer</a>
             <div className={classes.data}>
                 <h2 className={classes.h2}>Views: {views < 0 ? "∞" : views}</h2>
                 <h2 className={classes.h2}>

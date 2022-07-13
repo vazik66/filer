@@ -9,7 +9,7 @@ const packs = [
     // {name: '3', id: '53', files: []},
     // {name: '4', id: '54', files: []},
     // {name: '5', id: '55', files: []},
-    {name: 'Create new pack', id: 'needToGenerateRandom', files: []},
+    {name: 'Create new pack', id: 'needToGenerateRandom', files: [], href: '/editor'},
 ];
 
 const PackList = () => {

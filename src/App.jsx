@@ -1,5 +1,6 @@
 import React from 'react';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import classes from './App.module.css';
 import Main from './pages/main/Main';
 import Editor from './pages/editor/Editor';
 import NoPage from './pages/noPage/NoPage';

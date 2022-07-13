@@ -5,9 +5,8 @@ const Pack = ({pack}) => {
     return (
         <div
             className={classes.pack}
-            onClick={() => alert(1)}
         >
-            <div className={classes.text}>{pack.name}</div>
+            <a className={classes.text} href={pack.href}>{pack.name}</a>
         </div>
     );
 };
