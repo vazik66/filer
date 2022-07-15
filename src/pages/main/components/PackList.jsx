@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from "./PackList.module.css";
-import {v4 as uuid} from "uuid";
 import Pack from "./Pack";
+import {getPacksIdsByUserId} from '../../../TestData/TestDataProvider';
 
 const packs = [
     {name: '1', id: '51', files: []},
@@ -12,10 +12,12 @@ const packs = [
     {name: 'Create new pack', id: 'needToGenerateRandom', files: [], href: '/editor'},
 ];
 
-const PackList = () => {
+const PackList = ({userId}) => {
     return (
         <div className={classes.packs}>
-            {packs.map(element => <Pack pack={element} key={uuid()} />)}
+            {getPacksIdsByUserId(userId).map(packId => (
+                <Pack packId={packId} key={packId} />
+            ))}
         </div>
     );
 };

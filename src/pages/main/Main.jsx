@@ -2,11 +2,11 @@ import React from 'react';
 import classes from "./Main.module.css";
 import PackList from "./components/PackList";
 
-const Main = () => {
+const Main = ({userId}) => {
     return (
-        <div className={classes.main}>
+        <div>
             <h1>Filer</h1>
-            <PackList />
+            <PackList userId={userId} />
         </div>
     );
 };

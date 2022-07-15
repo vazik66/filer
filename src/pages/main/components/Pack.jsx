@@ -1,13 +1,17 @@
 import React from 'react';
+import {useNavigate} from 'react-router-dom';
 import classes from "./Pack.module.css";
 
-const Pack = ({pack}) => {
+const Pack = ({packId}) => {
+    const navigate = useNavigate();
+
     return (
-        <div
+        <button
             className={classes.pack}
+            onClick={() => navigate(packId)}
         >
-            <a className={classes.text} href={pack.href}>{pack.name}</a>
-        </div>
+            {packId}
+        </button>
     );
 };
 

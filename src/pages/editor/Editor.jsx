@@ -6,6 +6,7 @@ import Countdown from 'react-countdown';
 import axios, {post} from 'axios';
 import JSZip from 'jszip';
 import {saveAs} from 'file-saver';
+import {useParams} from 'react-router-dom';
 
 import svgStatus from '../../icons/status.svg';
 import svgSaveAll from '../../icons/saveAll.svg';
@@ -24,40 +25,54 @@ function fileFromString(text) {
 const isDirectory = maybeFile => !maybeFile.type && maybeFile.size % 4096 === 0;
 
 const Editor = () => {
-    async function unzip(file) {
-        const zipper = new JSZip();
-        return await zipper.loadAsync(file);
-    }
-
-    useEffect(() => {
-        const fetchData = async () => {
-            // const result = await axios(
-            //     'https://jsonplaceholder.typicode.com/todos/1'
-            // );
-            // setPackData(result.data);
-            // const zip = new JSZip();
-            // const result = {
-            //     user: 'aaaaa',
-            //     packId: 'bbbbb',
-            //     file: zip.file('adaw.txt', fileFromString('clipboardText')),
-            //     views: 15,
-            //     time: 1657806540546,
-            //     password: 'xx',
-            // };
-            // if (result.file) setFiles([unzip(result.file)]);
-            // if (result.views) setViews(views);
-            // if (result.time) setTime(time);
-            // if (result.password) setPassword(password);
-        };
-        fetchData();
-    }, []);
-
     const [files, setFiles] = useState([]);
     const [views, setViews] = useState(null);
     const [time, setTime] = useState(null);
     const [password, setPassword] = useState(null);
 
+    const params = useParams();
     const [settingsClosed, setSettingsClosed] = useState(true);
+    const [loadPage, setLoadPage] = useState(true);
+
+    // useEffect(tryLoadData);
+    //
+    // function tryLoadData() {
+    //     const pack = getPack(params.userId, params.packId);
+    //     setLoadPage(!!pack);
+    //     if (!loadPage) return;
+    //     setPassword(pack.password);
+    //     setViews(pack.views);
+    //     setTime(pack.time);
+    //         "archivePath": null
+    // }
+
+    // async function unzip(file) {
+    //     const zipper = new JSZip();
+    //     return await zipper.loadAsync(file);
+    // }
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         // const result = await axios(
+    //         //     'https://jsonplaceholder.typicode.com/todos/1'
+    //         // );
+    //         // setPackData(result.data);
+    //         // const zip = new JSZip();
+    //         // const result = {
+    //         //     user: 'aaaaa',
+    //         //     packId: 'bbbbb',
+    //         //     file: zip.file('adaw.txt', fileFromString('clipboardText')),
+    //         //     views: 15,
+    //         //     time: 1657806540546,
+    //         //     password: 'xx',
+    //         // };
+    //         // if (result.file) setFiles([unzip(result.file)]);
+    //         // if (result.views) setViews(views);
+    //         // if (result.time) setTime(time);
+    //         // if (result.password) setPassword(password);
+    //     };
+    //     fetchData();
+    // }, []);
 
     function addFiles(newFiles) {
         const fileNames = files.map(file => file.name);
@@ -89,22 +104,22 @@ const Editor = () => {
 
     const renderer = ({days, hours}) => <span>{days} days {hours} hours</span>;
 
-    function submitChanges() {
-        // const newPackData = {
-        //     user: 'tt',
-        //     packId: 'ff',
-        //     files: files,
-        //     views: views,
-        //     time: time,
-        //     password: password
-        // };
-        // post('/', newPackData);
-
-        const zip = new JSZip();
-        files.forEach(file => zip.file(file.name, file))
-        zip.generateAsync({type:'blob'}).then(content =>
-            saveAs(content, 'example.zip'));
-    }
+    // function submitChanges() {
+    //     // const newPackData = {
+    //     //     user: 'tt',
+    //     //     packId: 'ff',
+    //     //     files: files,
+    //     //     views: views,
+    //     //     time: time,
+    //     //     password: password
+    //     // };
+    //     // post('/', newPackData);
+    //
+    //     const zip = new JSZip();
+    //     files.forEach(file => zip.file(file.name, file))
+    //     zip.generateAsync({type:'blob'}).then(content =>
+    //         saveAs(content, 'example.zip'));
+    // }
 
     const toggleSettings = () => setSettingsClosed(!settingsClosed);
 
