@@ -6,12 +6,9 @@ import Countdown from 'react-countdown';
 import axios, {post} from 'axios';
 import JSZip from 'jszip';
 import {saveAs} from 'file-saver';
-import {useParams} from 'react-router-dom';
-
-import svgStatus from '../../icons/status.svg';
-import svgSaveAll from '../../icons/saveAll.svg';
-import svgSettings from '../../icons/settings.svg';
-import IconButton from "./components/IconButton";
+import {useNavigate, useParams} from 'react-router-dom';
+import ServiceButtons from "./components/ServiceButtons";
+import Characteristics from "./components/Characteristics";
 
 const filesInPackLimit = 5;
 
@@ -33,6 +30,34 @@ const Editor = () => {
     const params = useParams();
     const [settingsClosed, setSettingsClosed] = useState(true);
     const [loadPage, setLoadPage] = useState(true);
+
+    function addFiles(newFiles) {
+        const fileNames = files.map(file => file.name);
+        const result = newFiles.filter(file =>
+            !fileNames.includes(file.name) && !isDirectory(file));
+        setFiles(files.concat(result).slice(0, filesInPackLimit));
+    }
+
+    function onDrop(e) {
+        e.preventDefault();
+        addFiles([...e.dataTransfer.files]);
+    }
+
+    function onDragOver(e) {
+        e.preventDefault();
+    }
+
+    function onPaste(e) {
+        const clipboardText = e.clipboardData.getData('Text');
+        if (clipboardText) addFiles([fileFromString(clipboardText)]);
+        else {
+            const clipboardItems = Object.values(e.clipboardData.items);
+            const newFiles = clipboardItems
+                .filter(item => item.kind === 'file')
+                .map(item => item.getAsFile());
+            addFiles(newFiles);
+        }
+    }
 
     // useEffect(tryLoadData);
     //
@@ -74,34 +99,6 @@ const Editor = () => {
     //     fetchData();
     // }, []);
 
-    function addFiles(newFiles) {
-        const fileNames = files.map(file => file.name);
-        const result = newFiles.filter(file =>
-            !fileNames.includes(file.name) && !isDirectory(file));
-        setFiles(files.concat(result).slice(0, filesInPackLimit));
-    }
-
-    function onDrop(e) {
-        e.preventDefault();
-        addFiles([...e.dataTransfer.files]);
-    }
-
-    function onDragOver(e) {
-        e.preventDefault();
-    }
-
-    function onPaste(e) {
-        const clipboardText = e.clipboardData.getData('Text');
-        if (clipboardText) addFiles([fileFromString(clipboardText)]);
-        else {
-            const clipboardItems = Object.values(e.clipboardData.items);
-            const newFiles = clipboardItems
-                .filter(item => item.kind === 'file')
-                .map(item => item.getAsFile());
-            addFiles(newFiles);
-        }
-    }
-
     const renderer = ({days, hours}) => <span>{days} days {hours} hours</span>;
 
     // function submitChanges() {
@@ -131,6 +128,8 @@ const Editor = () => {
             saveAs(content, 'filer.zip'));
     }
 
+    const navigate = useNavigate();
+
     return (
         <div
             className={classes.editor}
@@ -138,27 +137,24 @@ const Editor = () => {
             onDragOver={onDragOver}
             onPaste={onPaste}
         >
-            <div className={classes.data}>
-                <h2 className={classes.h2}>Views: {views < 0 ? "∞" : views}</h2>
-                <h2 className={classes.h2}>
-                    Time left:&nbsp;
-                    {time && <Countdown date={time} renderer={renderer} autoStart />}
-                </h2>
-            </div>
-            <div className={classes.serviceButtons}>
-                <IconButton image={svgStatus} show />
-                <IconButton
-                    image={svgSaveAll}
-                    show={settingsClosed}
-                    onClick={downloadAllFiles}
+            <header>
+                <h1
+                    className={classes.editorH1}
+                    onClick={() => navigate("/")}
+                >
+                    Filer
+                </h1>
+                <ServiceButtons
+                    downloadAllFiles={downloadAllFiles}
+                    settingsClosed={settingsClosed}
+                    toggleSettings={toggleSettings}
                 />
-                <IconButton
-                    image={svgSettings}
-                    onClick={toggleSettings}
-                    style={{backgroundColor: settingsClosed ? "" : "#999"}}
-                    show
-                />
-            </div>
+            </header>
+            <h2 className={classes.h2}>Views: {views < 0 ? "∞" : views}</h2>
+            <h2 className={classes.h2}>
+                Time left:&nbsp;
+                {time && <Countdown date={time} renderer={renderer} autoStart />}
+            </h2>
             <FileManager
                 files={files}
                 setFiles={setFiles}

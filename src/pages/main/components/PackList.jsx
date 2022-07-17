@@ -1,6 +1,6 @@
 import React from 'react';
-import classes from "./PackList.module.css";
-import Pack from "./Pack";
+import classes from './PackList.module.css';
+import Pack from './Pack';
 
 const PackList = () => {
     return (

@@ -1,0 +1,5 @@
+.serviceButtons {
+    display: flex;
+    margin: auto 0 auto auto;
+    gap: 15px;
+}
