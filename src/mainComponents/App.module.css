@@ -22,12 +22,7 @@ body::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
 
-header {
-    width: 100%;
-    margin: 40px auto 40px 0;
-}
-
-footer {
+header, footer {
     display: flex;
     width: 100%;
     margin: 50px auto;
@@ -35,4 +30,13 @@ footer {
 
 a {
     text-decoration: none;
+}
+
+h1 {
+    margin: 0;
+    padding: 0;
+    color: #2F2F2F;
+    font-family: 'Roboto Mono', sans-serif;
+    font-weight: 700;
+    font-size: 64px;
 }

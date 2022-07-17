@@ -9,7 +9,8 @@ const PackList = () => {
             <Pack packId={"2"} />
             <Pack packId={"3"} />
             <Pack packId={"4"} />
-            <Pack packId={"Create-new-pack"} />
+            <Pack packId={"5"} />
+            <Pack packId={"create-new-pack"} />
         </div>
     );
 };
