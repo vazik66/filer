@@ -22,6 +22,17 @@ body::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
 
+header {
+    width: 100%;
+    margin: 40px auto 40px 0;
+}
+
+footer {
+    display: flex;
+    width: 100%;
+    margin: 50px auto;
+}
+
 a {
     text-decoration: none;
 }

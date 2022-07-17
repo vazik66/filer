@@ -1,15 +1,4 @@
-
-
-
-/*h1 {*/
-/*    display: flex;*/
-/*    height: fit-content;*/
-/*    margin: 50px auto;*/
-/*    padding: 0;*/
-/*    z-index: 2;*/
-/*}*/
-
-/*.main {*/
-/*    display: flex;*/
-/*    flex-flow: column;*/
-/*}*/
+.main {
+    display: flex;
+    width: 100%;
+}

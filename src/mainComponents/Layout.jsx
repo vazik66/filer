@@ -1,19 +1,27 @@
 import React from 'react';
-import {Outlet} from 'react-router-dom';
-import classes from "../pages/editor/Editor.module.css";
+import {Outlet, useNavigate} from 'react-router-dom';
+import classes from "./Layout.module.css";
 
 const Layout = () => {
+    const navigate = useNavigate();
+
     return (
-        <div>
+        <div className={classes.layout}>
             <header>
-                <a className={classes.h1} href="/">Filer</a>
+                <h1
+                    className={classes.h1}
+                    onClick={() => navigate("/")}
+                >
+                    Filer
+                </h1>
             </header>
             <Outlet />
             <footer>
                 <a
                     className={classes.link}
                     href="https://github.com/vazik66/filer"
-                    target="_blank" rel="noreferrer"
+                    target="_blank"
+                    rel="noreferrer"
                 >
                     github.com/vazik66/filer
                 </a>

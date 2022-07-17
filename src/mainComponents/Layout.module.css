@@ -1,0 +1,30 @@
+.layout {
+    width: 45%;
+    min-width: 325px;
+    margin: auto;
+}
+
+.h1 {
+    margin: 0;
+    padding: 0;
+    color: #2F2F2F;
+    font-family: 'Roboto Mono', sans-serif;
+    font-weight: 700;
+    font-size: 64px;
+    cursor: pointer;
+}
+
+.link {
+    margin: auto;
+    text-decoration: none;
+    color: #d0cfcf;
+    font-family: 'Roboto Mono', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    transition: .3s;
+}
+
+.link:hover {
+    color: #bebebe;
+    transition: .3s;
+}

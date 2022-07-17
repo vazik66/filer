@@ -8,9 +8,9 @@ const Pack = ({packId}) => {
     return (
         <button
             className={classes.pack}
-            onClick={() => navigate(packId)}
+            onClick={() => navigate("hello/" + packId)}
         >
-            {packId}
+            <p className={classes.text}>{packId}</p>
         </button>
     );
 };

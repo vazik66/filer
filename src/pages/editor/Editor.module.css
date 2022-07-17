@@ -13,15 +13,6 @@
     margin: 10px auto 30px 0;
 }
 
-.h1 {
-    font-family: 'Roboto Mono', sans-serif;
-    font-weight: 700;
-    font-size: 64px;
-    color: #2F2F2F;
-    padding: 0;
-    margin: 0;
-}
-
 .h2 {
     font-family: 'Roboto Mono', sans-serif;
     font-weight: 500;
@@ -37,13 +28,4 @@
     right: 0;
     top: 15px;
     gap: 15px;
-}
-
-.link {
-    font-family: 'Roboto Mono', sans-serif;
-    font-weight: 500;
-    font-size: 16px;
-    color: #d0cfcf;
-    text-decoration: none;
-    margin: 40px auto 0 auto;
 }

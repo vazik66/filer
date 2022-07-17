@@ -1,8 +1,6 @@
 .packs {
-    display: grid;
-    justify-content: center;
+    display: flex;
     width: 100%;
-    grid-gap: 40px;
-    margin-bottom: 40px;
-    grid-template-columns: repeat(auto-fill, 300px);
+    flex-wrap: wrap;
+    gap: 30px;
 }
