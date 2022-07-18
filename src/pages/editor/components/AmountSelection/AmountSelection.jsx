@@ -8,7 +8,12 @@ const AmountSelection = ({text, amounts, setValue, input, buttonStyle}) => {
     return (
         <div className={classes.amountSelection}>
             <h3 className={classes.h3}>{text}</h3>
-            <ASButtonList amounts={amounts} buttonStyle={buttonStyle} setValue={setValue} input={input}/>
+            <ASButtonList
+                amounts={amounts}
+                buttonStyle={buttonStyle}
+                setValue={setValue}
+                input={input}
+            />
         </div>
     );
 };

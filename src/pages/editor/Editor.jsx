@@ -8,6 +8,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 import ServiceButtons from "./components/ServiceButtons";
 import Characteristics from "./components/Characteristics";
 import {useFiles} from "../../hooks/useFiles";
+import {useViews} from "../../hooks/useViews";
 
 function fileFromString(text) {
     const currentTime = Date.now();
@@ -18,10 +19,10 @@ function fileFromString(text) {
 }
 
 const Editor = () => {
-    const files = useFiles([], 1000000);
+    const files = useFiles([], 1000000000);
     const [password, setPassword] = useState(null);
     const [settingsClosed, setSettingsClosed] = useState(true);
-    const [views, setViews] = useState(null);
+    const views = useViews(-1);
     const [time, setTime] = useState(null);
 
     const navigate = useNavigate();
@@ -61,10 +62,7 @@ const Editor = () => {
             onPaste={onPaste}
         >
             <header>
-                <h1
-                    className={classes.editorH1}
-                    onClick={() => navigate("/")}
-                >
+                <h1 className={classes.editorH1} onClick={() => navigate("/")}>
                     Filer
                 </h1>
                 <ServiceButtons
@@ -73,14 +71,15 @@ const Editor = () => {
                     toggleSettings={toggleSettings}
                 />
             </header>
-            {/*<h2 className={classes.h2}>Views: {views < 0 ? "∞" : views}</h2>*/}
+            <h2>{views.format()}</h2>
+            <h2>{files.size.format()}</h2>
             {/*<h2 className={classes.h2}>*/}
             {/*    Time left:&nbsp;*/}
             {/*    {time && <Countdown date={time} renderer={renderer} autoStart />}*/}
             {/*</h2>*/}
             <FileManager files={files} show={settingsClosed} />
             <Settings
-                setViews={setViews}
+                setViews={views.setMax}
                 setTime={setTime}
                 setPassword={setPassword}
                 show={!settingsClosed}

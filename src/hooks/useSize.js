@@ -1,12 +1,25 @@
 import {useState} from 'react';
 
-export const useSize = (max) => {
+const formatBytes = (bytes, decimals=2) => {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+};
+
+export const useSize = (maxSize) => {
     const [value, setValue] = useState(0);
-    const [maxSize, setMaxSize] = useState(max);
+    const [max, setMax] = useState(maxSize);
 
-    const canAdd = () => value < maxSize;
+    const format = () => formatBytes(value) + ' / ' + formatBytes(max);
 
-    const canAddFile = fileSize => value + fileSize < maxSize
+    const add = size => setValue(value + size);
+
+    const canAdd = () => value < max;
+
+    const canAddFile = fileSize => value + fileSize < max
 
     const recalculate = files => {
         if (!files) return;
@@ -15,5 +28,5 @@ export const useSize = (max) => {
         setValue(sum);
     };
 
-    return {value, canAdd, canAddFile, recalculate};
+    return {value, add, canAdd, canAddFile, recalculate, format};
 };

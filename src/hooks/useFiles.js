@@ -16,12 +16,17 @@ export const useFiles = (initialState=[], maxSize) => {
     }, [value]);
 
     const add = newFiles => {
-        const fileNames = value.map(file => file.name);
-        newFiles
-            .filter(file => !fileNames.includes(file.name) && !isDirectory(file))
-            .forEach(file => {
-                if (size.canAddFile(file.size)) setValue(value.concat(file));
-            });
+        const filesNames = value.map(file => file.name);
+        const filteredFiles = newFiles.filter(file =>
+            !filesNames.includes(file.name) && !isDirectory(file));
+        const result = [];
+        filteredFiles.forEach(file => {
+            if (size.canAddFile(file.size)) {
+                result.push(file);
+                size.add(file.size);
+            }
+        });
+        setValue(value.concat(result));
     };
 
     const download = file => saveAs(file, file.name);
@@ -42,5 +47,5 @@ export const useFiles = (initialState=[], maxSize) => {
             saveAs(content, 'filer.zip'));
     };
 
-    return {value, showInput, add, download, remove, replace, downloadAll};
+    return {value, showInput, size, add, download, remove, replace, downloadAll};
 };
