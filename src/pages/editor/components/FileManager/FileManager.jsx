@@ -16,8 +16,7 @@ const FileManager = ({files, show}) => {
                 download={files.download}
                 replace={files.replace}
             />)}
-            {/*{files.showAddButton() && <FileInput addFiles={files.add} />}*/}
-            <FileInput addFiles={files.add} />
+            {files.showInput && <FileInput addFiles={files.add} />}
         </div>
     );
 };
