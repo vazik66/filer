@@ -4,34 +4,25 @@ import {saveAs} from 'file-saver';
 import FileHeader from './FileHeader/FileHeader';
 import FileDescription from './FileDescription/FileDescription';
 
-const FilePanel = ({file, files, setFiles}) => {
-    const [currentFile, setCurrentFile] = useState(file);
+const FilePanel = ({file, download, remove}) => {
+    // const [currentFile, setCurrentFile] = useState(file);
     const [description, setDescription] = useState(false);
-
-    useEffect(() => {
-        setFiles(getFilesExceptOne().concat(currentFile));
-    }, [currentFile]);
-
-    const getFilesExceptOne = () => files.filter(element => element !== file);
-
-    const methods = {
-        downloadFile: () => saveAs(currentFile, currentFile.name),
-        toggleDescription: () => setDescription(!description),
-        deleteFile: () => setFiles(getFilesExceptOne()),
-    };
+    //
+    // useEffect(() => {
+    //     setFiles(getFilesExceptOne().concat(currentFile));
+    // }, [currentFile]);
+    //
+    // const getFilesExceptOne = () => files.filter(element => element !== currentFile);
 
     return (
         <div className={classes.filePanel}>
             <FileHeader
-                methods={methods}
-                currentFile={currentFile}
-                setCurrentFile={setCurrentFile}
+                file={file}
+                download={download}
+                remove={remove}
+                toggleDescription={() => setDescription(!description)}
             />
-            <FileDescription
-                file={currentFile}
-                type={currentFile.type}
-                show={description}
-            />
+            <FileDescription file={file} show={description} />
         </div>
     );
 };

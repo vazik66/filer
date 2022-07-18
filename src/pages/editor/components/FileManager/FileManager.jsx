@@ -3,20 +3,20 @@ import classes from './FileManager.module.css';
 import FilePanel from './FilePanel';
 import FileInput from './FileHeader/FileInput';
 
-const filesInPackLimit = 5;
-
-const FileManager = ({files, setFiles, addFiles, show}) => {
+const FileManager = ({files, show}) => {
     return (
         <div
             className={classes.fileManager}
             style={{display: show ? "flex" : "none"}}
         >
-            {files.map(file => <FilePanel
+            {files.value.map(file => <FilePanel
+                key={file.name}
                 file={file}
-                files={files}
-                setFiles={setFiles}
+                remove={files.remove}
+                download={files.download}
             />)}
-            {files.length < filesInPackLimit && <FileInput addFiles={addFiles} />}
+            {/*{files.showAddButton() && <FileInput addFiles={files.add} />}*/}
+            <FileInput addFiles={files.add} />
         </div>
     );
 };
