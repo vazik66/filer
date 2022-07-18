@@ -19,5 +19,11 @@ export const useFiles = (initialState=[]) => {
 
     const remove = file => setValue(value.filter(vFile => vFile.name !== file.name));
 
-    return {value, add, download, remove};
+    const replace = (a, b) => {
+        const newFiles = value.map(file =>
+            file.name === a.name ? b : file);
+        setValue(newFiles);
+    };
+
+    return {value, add, download, remove, replace};
 };

@@ -31,13 +31,6 @@ const Editor = () => {
     // const [settingsClosed, setSettingsClosed] = useState(true);
     // const [loadPage, setLoadPage] = useState(true);
     //
-    // function addFiles(newFiles) {
-    //     const fileNames = files.map(file => file.name);
-    //     const result = newFiles.filter(file =>
-    //         !fileNames.includes(file.name) && !isDirectory(file));
-    //     setFiles(files.concat(result).slice(0, filesInPackLimit));
-    // }
-    //
     // function onDrop(e) {
     //     e.preventDefault();
     //     addFiles([...e.dataTransfer.files]);

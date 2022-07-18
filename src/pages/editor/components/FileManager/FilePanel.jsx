@@ -1,18 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import classes from './FilePanel.module.css';
-import {saveAs} from 'file-saver';
 import FileHeader from './FileHeader/FileHeader';
 import FileDescription from './FileDescription/FileDescription';
 
-const FilePanel = ({file, download, remove}) => {
-    // const [currentFile, setCurrentFile] = useState(file);
+const FilePanel = ({file, download, remove, replace}) => {
     const [description, setDescription] = useState(false);
-    //
-    // useEffect(() => {
-    //     setFiles(getFilesExceptOne().concat(currentFile));
-    // }, [currentFile]);
-    //
-    // const getFilesExceptOne = () => files.filter(element => element !== currentFile);
 
     return (
         <div className={classes.filePanel}>
@@ -21,6 +13,7 @@ const FilePanel = ({file, download, remove}) => {
                 download={download}
                 remove={remove}
                 toggleDescription={() => setDescription(!description)}
+                replace={replace}
             />
             <FileDescription file={file} show={description} />
         </div>

@@ -8,7 +8,7 @@ import svgExpand from '../../../../../icons/expand.svg';
 
 const fileTypesToShow = ['text/plain', 'image/jpeg', 'image/png'];
 
-const FileHeader = ({file, download, remove, toggleDescription}) => {
+const FileHeader = ({file, download, remove, toggleDescription, replace}) => {
     return (
         <div className={classes.fileHeader}>
             <FileButton
@@ -16,7 +16,7 @@ const FileHeader = ({file, download, remove, toggleDescription}) => {
                 onClick={() => download(file)}
                 style={{margin: "auto 15px auto 0"}}
             />
-            {/*<File file={currentFile} setFile={setCurrentFile} />*/}
+            <File file={file} replace={replace} />
             <FileButton
                 image={svgExpand}
                 onClick={toggleDescription}

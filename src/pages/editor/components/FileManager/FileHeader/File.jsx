@@ -4,10 +4,10 @@ import FilenameInput from './FilenameInput';
 
 const getFileType = fileName => fileName.split('.').pop();
 
-const File = ({file, setFile}) => {
+const File = ({file, replace}) => {
     return (
         <div className={classes.file}>
-            <FilenameInput file={file} setFile={setFile} />
+            <FilenameInput file={file} replace={replace} />
             <div className={classes.type}>{getFileType(file.name)}</div>
         </div>
     );

@@ -14,6 +14,7 @@ const FileManager = ({files, show}) => {
                 file={file}
                 remove={files.remove}
                 download={files.download}
+                replace={files.replace}
             />)}
             {/*{files.showAddButton() && <FileInput addFiles={files.add} />}*/}
             <FileInput addFiles={files.add} />
