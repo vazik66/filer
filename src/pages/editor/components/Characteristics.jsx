@@ -2,12 +2,14 @@ import React from 'react';
 import classes from "./Characteristics.module.css";
 import Block from "./Block";
 
-const Characteristics = ({texts}) => {
+const Characteristics = ({views, time, size}) => {
     return (
         <div className={classes.characteristics}>
-            <Block text={texts[0]} />
-            <Block text={texts[1]} />
-            <Block text={texts[2]} />
+            <div className={classes.top}>
+                <Block text={views} />
+                <Block text={time} />
+            </div>
+            <Block text={size} />
         </div>
     );
 };

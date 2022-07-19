@@ -4,19 +4,19 @@ import FileManager from './components/FileManager/FileManager';
 import Settings from './components/Settings';
 import Countdown from 'react-countdown';
 import axios, {post} from 'axios';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import ServiceButtons from "./components/ServiceButtons";
 import Characteristics from "./components/Characteristics";
 import {useFiles} from "../../hooks/useFiles";
 import {useViews} from "../../hooks/useViews";
 
-function fileFromString(text) {
+const fileFromString = text => {
     const currentTime = Date.now();
     return new File([text],
         `${currentTime}.txt`,
         {type: 'text/plain', lastModified: currentTime}
     );
-}
+};
 
 const Editor = () => {
     const files = useFiles([], 1000000000);
@@ -77,7 +77,11 @@ const Editor = () => {
                     toggleSettings={toggleSettings}
                 />
             </header>
-            <Characteristics texts={[views.format(), timeFormatted, files.size.format()]} />
+            <Characteristics
+                views={views.format()}
+                time={timeFormatted}
+                size={files.size.format()}
+            />
             <FileManager files={files} show={settingsClosed} />
             <Settings
                 setViews={views.setMax}
