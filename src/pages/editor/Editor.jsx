@@ -20,10 +20,12 @@ function fileFromString(text) {
 
 const Editor = () => {
     const files = useFiles([], 1000000000);
+    const views = useViews(-1);
+
     const [password, setPassword] = useState(null);
     const [settingsClosed, setSettingsClosed] = useState(true);
-    const views = useViews(-1);
     const [time, setTime] = useState(null);
+    const [timeFormatted, setTimeFormatted] = useState('');
 
     const navigate = useNavigate();
 
@@ -48,11 +50,10 @@ const Editor = () => {
 
     const toggleSettings = () => setSettingsClosed(!settingsClosed);
 
-    // // async function unzip(file) {
-    // //     const zipper = new JSZip();
-    // //     return await zipper.loadAsync(file);
-    // // }
-    // const renderer = ({days, hours}) => <span>{days} days {hours} hours</span>;
+    // async function unzip(file) {
+    //     const zipper = new JSZip();
+    //     return await zipper.loadAsync(file);
+    // }
 
     return (
         <div
@@ -61,6 +62,11 @@ const Editor = () => {
             onDragOver={onDragOver}
             onPaste={onPaste}
         >
+            {time && <Countdown
+                date={time}
+                renderer={({days, hours}) => setTimeFormatted(`${days}d ${hours}h`)}
+                autoStart
+            />}
             <header>
                 <h1 className={classes.editorH1} onClick={() => navigate("/")}>
                     Filer
@@ -71,12 +77,7 @@ const Editor = () => {
                     toggleSettings={toggleSettings}
                 />
             </header>
-            <h2>{views.format()}</h2>
-            <h2>{files.size.format()}</h2>
-            {/*<h2 className={classes.h2}>*/}
-            {/*    Time left:&nbsp;*/}
-            {/*    {time && <Countdown date={time} renderer={renderer} autoStart />}*/}
-            {/*</h2>*/}
+            <Characteristics texts={[views.format(), timeFormatted, files.size.format()]} />
             <FileManager files={files} show={settingsClosed} />
             <Settings
                 setViews={views.setMax}

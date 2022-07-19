@@ -1,6 +1,5 @@
 .block {
-    width: 200px;
-    height: 60px;
     background-color: darkorange;
     border-radius: 16px;
+    padding: 20px;
 }
