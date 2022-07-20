@@ -1,11 +1,12 @@
 import React from 'react';
 import classes from "./ASButtonList.module.css";
 
-function select(value, setValue) {
-    if (value) setValue(value);
-}
-
 const ASButtonList = ({amounts, buttonStyle, setValue, input}) => {
+    const select = value => {
+        console.log(value)
+        if (value) setValue(value);
+    };
+
     return (
         <div className={classes.list}>
             {amounts.map((item) =>
@@ -13,16 +14,15 @@ const ASButtonList = ({amounts, buttonStyle, setValue, input}) => {
                     key={item}
                     style={buttonStyle}
                     className={classes.item}
-                    onClick={() => select(item, setValue)}
+                    onClick={() => select(item)}
                 >
                     {item < 0 ? "∞" : item}
                 </button>)}
             {input && <input
-                style={{paddingLeft: "12px"}}
+                style={{paddingLeft: "12px", width: "180px"}}
                 className={classes.item}
-                min="1"
                 type="number"
-                onChange={e => select(e.target.value, setValue)}
+                onChange={e => select(e.target.value)}
             />}
         </div>
     );

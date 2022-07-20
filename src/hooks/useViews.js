@@ -1,24 +1,12 @@
-import {useEffect, useState} from 'react';
-
-const formatNumber = (number) => {
-    if (number < 1000) return number;
-    const k = 1000;
-    const sizes = ['', ' K', ' M', ' B'];
-    const i = Math.floor(Math.log(number) / Math.log(k));
-    const result = parseFloat((number / Math.pow(k, i)).toFixed(2));
-    return result + sizes[i];
-};
+import {useState} from 'react';
 
 export const useViews = (maxViews) => {
     const [value, setValue] = useState(0);
     const [max, setMax] = useState(maxViews);
 
-    useEffect(() => {
-        if (max < 0 || max > 1000000000) setMax(-1);
-    }, [max]);
+    const changeMax = number => setMax((number < 0 || number > 999999) ? -1 : number);
 
-    const format = () => formatNumber(value) + ' / ' +
-        ((max === -1) ? '∞' : formatNumber(max));
+    const format = () => value + ' / ' + ((max === -1) ? '∞' : max);
 
-    return {setMax, format};
+    return {changeMax, format};
 };

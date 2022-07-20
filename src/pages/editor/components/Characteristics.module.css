@@ -1,12 +1,6 @@
 .characteristics {
     display: flex;
-    width: 100%;
     flex-flow: column;
     margin-bottom: 50px;
-    gap: 20px;
-}
-
-.top {
-    display: flex;
     gap: 20px;
 }

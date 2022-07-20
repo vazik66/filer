@@ -84,7 +84,7 @@ const Editor = () => {
             />
             <FileManager files={files} show={settingsClosed} />
             <Settings
-                setViews={views.setMax}
+                setViews={views.changeMax}
                 setTime={setTime}
                 setPassword={setPassword}
                 show={!settingsClosed}

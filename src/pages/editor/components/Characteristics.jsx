@@ -5,10 +5,8 @@ import Block from "./Block";
 const Characteristics = ({views, time, size}) => {
     return (
         <div className={classes.characteristics}>
-            <div className={classes.top}>
-                <Block text={views} />
-                <Block text={time} />
-            </div>
+            <Block text={views} />
+            <Block text={time} />
             <Block text={size} />
         </div>
     );
