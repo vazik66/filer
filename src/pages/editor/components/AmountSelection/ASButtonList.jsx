@@ -23,6 +23,7 @@ const ASButtonList = ({amounts, buttonStyle, setValue, input}) => {
                 className={classes.item}
                 type="number"
                 onChange={e => select(e.target.value)}
+                placeholder="Your value"
             />}
         </div>
     );

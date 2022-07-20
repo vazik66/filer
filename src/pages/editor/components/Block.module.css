@@ -4,10 +4,22 @@
 }
 
 .text {
-    margin: 0;
+    margin: auto 0;
     padding: 0;
     color: #2F2F2F;
     font-family: 'Roboto Mono', sans-serif;
     font-weight: 600;
-    font-size: 22px;
+    font-size: 24px;
+}
+
+.icon {
+    display: flex;
+    width: 50px;
+    height: 50px;
+    margin: 0 10px 0 0;
+}
+
+.img {
+    display: flex;
+    margin: auto;
 }

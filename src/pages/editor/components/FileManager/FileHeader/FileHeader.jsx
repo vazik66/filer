@@ -4,7 +4,7 @@ import FileButton from './FileButton';
 import File from './File';
 import svgSave from '../../../../../icons/save.svg';
 import svgDelete from '../../../../../icons/delete.svg';
-import svgExpand from '../../../../../icons/expand.svg';
+import svgExpand from '../../../../../icons/newExpand.svg';
 
 const fileTypesToShow = ['text/plain', 'image/jpeg', 'image/png'];
 
