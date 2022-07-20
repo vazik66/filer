@@ -6,7 +6,8 @@ import svgSave from '../../../../../icons/save.svg';
 import svgDelete from '../../../../../icons/delete.svg';
 import svgExpand from '../../../../../icons/newExpand.svg';
 
-const fileTypesToShow = ['text/plain', 'image/jpeg', 'image/png'];
+const fileTypesToShow = ['text/plain', 'image/jpeg', 'image/png',
+    'video/mp4', 'video/mov', 'video/ogv', 'video/webm'];
 
 const FileHeader = ({file, download, remove, toggleDescription, replace}) => {
     return (
