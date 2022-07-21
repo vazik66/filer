@@ -6,7 +6,7 @@ import Countdown from 'react-countdown';
 import axios, {post} from 'axios';
 import {useNavigate} from 'react-router-dom';
 import ServiceButtons from "./components/Service/ServiceButtons";
-import Characteristics from "./components/Characteristics";
+import Characteristics from "./components/Characretictics/Characteristics";
 import {useFiles} from "../../hooks/useFiles";
 import {useViews} from "../../hooks/useViews";
 
@@ -25,7 +25,6 @@ const Editor = () => {
     const [password, setPassword] = useState(null);
     const [settingsClosed, setSettingsClosed] = useState(true);
     const [time, setTime] = useState(null);
-    const [timeFormatted, setTimeFormatted] = useState('');
 
     const navigate = useNavigate();
 
@@ -62,11 +61,6 @@ const Editor = () => {
             onDragOver={onDragOver}
             onPaste={onPaste}
         >
-            {time && <Countdown
-                date={time}
-                renderer={({days, hours}) => setTimeFormatted(`${days}d ${hours}h`)}
-                autoStart
-            />}
             <header>
                 <h1 className={classes.editorH1} onClick={() => navigate("/")}>
                     Filer
@@ -77,11 +71,15 @@ const Editor = () => {
                     toggleSettings={toggleSettings}
                 />
             </header>
-            <Characteristics
+            {time && <Characteristics
                 views={views.format()}
-                time={timeFormatted}
+                time={<Countdown
+                    date={time}
+                    renderer={({days, hours}) => `${days}d ${hours}h`}
+                    autoStart
+                />}
                 size={files.size.format()}
-            />
+            />}
             <FileManager files={files} show={settingsClosed} />
             <Settings
                 setViews={views.changeMax}
