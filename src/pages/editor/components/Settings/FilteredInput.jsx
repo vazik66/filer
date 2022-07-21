@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import classes from './FilteredInput.module.css';
 
-const FilteredInput = ({setValue, pattern, show}) => {
+const FilteredInput = ({setValue, pattern, hidden}) => {
     const [inputValue, setInputValue] = useState('');
 
     const tryChangeValue = e => {
@@ -12,7 +12,7 @@ const FilteredInput = ({setValue, pattern, show}) => {
 
     return (
         <input
-            style={{display: show ? "flex": "none"}}
+            style={{display: hidden ? "none" : null}}
             className={classes.input}
             value={inputValue}
             onChange={tryChangeValue}

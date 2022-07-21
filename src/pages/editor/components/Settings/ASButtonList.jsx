@@ -15,7 +15,7 @@ const ASButtonList = ({amounts, buttonStyle, setValue, input}) => {
                     {item < 0 ? "∞" : item}
                 </button>
             )}
-            <FilteredInput setValue={setValue} pattern={/\D/g} show={input} />
+            <FilteredInput setValue={setValue} pattern={/\D/g} hidden={!input} />
         </div>
     );
 };

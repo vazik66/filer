@@ -4,7 +4,6 @@ import IconButton from "./IconButton";
 import svgStatus from "../../../../icons/status.svg";
 import svgSaveAll from "../../../../icons/newSaveAll.svg";
 import svgSettings from "../../../../icons/settings.svg";
-import svgSettingsActive from "../../../../icons/settingsActive.svg";
 
 const ServiceButtons = ({downloadAllFiles, settingsClosed, toggleSettings}) => {
     return (
@@ -16,7 +15,8 @@ const ServiceButtons = ({downloadAllFiles, settingsClosed, toggleSettings}) => {
                 onClick={downloadAllFiles}
             />
             <IconButton
-                image={settingsClosed ? svgSettings : svgSettingsActive}
+                image={svgSettings}
+                iconFilter={{filter: settingsClosed ? null : "invert(100%) sepia(0%) saturate(7500%) hue-rotate(20deg) brightness(101%) contrast(96%)"}}
                 onClick={toggleSettings}
                 style={{backgroundColor: settingsClosed ? "" : "#2F2F2F"}}
                 show
