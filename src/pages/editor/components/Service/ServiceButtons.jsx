@@ -1,10 +1,10 @@
 import React from 'react';
 import classes from "./ServiceButtons.module.css";
 import IconButton from "./IconButton";
-import svgStatus from "../../../icons/status.svg";
-import svgSaveAll from "../../../icons/newSaveAll.svg";
-import svgSettings from "../../../icons/settings.svg";
-import svgSettingsActive from "../../../icons/settingsActive.svg";
+import svgStatus from "../../../../icons/status.svg";
+import svgSaveAll from "../../../../icons/newSaveAll.svg";
+import svgSettings from "../../../../icons/settings.svg";
+import svgSettingsActive from "../../../../icons/settingsActive.svg";
 
 const ServiceButtons = ({downloadAllFiles, settingsClosed, toggleSettings}) => {
     return (

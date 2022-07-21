@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import classes from './Editor.module.css';
 import FileManager from './components/FileManager/FileManager';
-import Settings from './components/Settings';
+import Settings from './components/Settings/Settings';
 import Countdown from 'react-countdown';
 import axios, {post} from 'axios';
 import {useNavigate} from 'react-router-dom';
-import ServiceButtons from "./components/ServiceButtons";
+import ServiceButtons from "./components/Service/ServiceButtons";
 import Characteristics from "./components/Characteristics";
 import {useFiles} from "../../hooks/useFiles";
 import {useViews} from "../../hooks/useViews";
@@ -19,7 +19,7 @@ const fileFromString = text => {
 };
 
 const Editor = () => {
-    const files = useFiles([], 1000000000);
+    const files = useFiles([], 5242880);
     const views = useViews(-1);
 
     const [password, setPassword] = useState(null);
