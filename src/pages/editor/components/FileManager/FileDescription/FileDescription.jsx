@@ -18,13 +18,13 @@ const switchRenderer = file => {
     }
 };
 
-const FileDescription = ({file, show}) => {
+const FileDescription = ({file}) => {
     return (
         <div
             className={classes.description}
-            style={{display: show ? "flex" : "none"}}
+            style={{display: file.extended ? "flex" : "none"}}
         >
-            {show && switchRenderer(file)}
+            {file.extended && switchRenderer(file.value)}
         </div>
     );
 };

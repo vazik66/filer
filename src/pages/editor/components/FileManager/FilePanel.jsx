@@ -1,21 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import classes from './FilePanel.module.css';
 import FileHeader from './FileHeader/FileHeader';
 import FileDescription from './FileDescription/FileDescription';
+import {useFile} from "../../../../hooks/useFile";
 
-const FilePanel = ({file, download, remove, replace}) => {
-    const [description, setDescription] = useState(false);
+const FilePanel = ({mapFile, remove}) => {
+    const file = useFile(mapFile);
 
     return (
         <div className={classes.filePanel}>
-            <FileHeader
-                file={file}
-                download={download}
-                remove={remove}
-                toggleDescription={() => setDescription(!description)}
-                replace={replace}
-            />
-            <FileDescription file={file} show={description} />
+            <FileHeader file={file} remove={remove} />
+            <FileDescription file={file} />
         </div>
     );
 };

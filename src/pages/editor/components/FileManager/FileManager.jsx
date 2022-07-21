@@ -11,10 +11,8 @@ const FileManager = ({files, show}) => {
         >
             {files.value.map(file => <FilePanel
                 key={file.name}
-                file={file}
+                mapFile={file}
                 remove={files.remove}
-                download={files.download}
-                replace={files.replace}
             />)}
             {files.showInput && <FileInput addFiles={files.add} />}
         </div>

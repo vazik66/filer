@@ -4,24 +4,22 @@ import classes from './FilenameInput.module.css';
 const maxInputWidth = 30;
 const replaceableSymbols = /[`|<>'"?*:/\\ ]/gi;
 
-const clearFilename = fileName => fileName.split('.').slice(0, -1).join('.');
-const getFileType = fileName => fileName.split('.').pop();
 const removeBadSymbols = string => string.replace(replaceableSymbols, '-');
 
-const FilenameInput = ({file, replace}) => {
-    const [width, setWidth] = useState(clearFilename(file.name).length);
+const FilenameInput = ({file}) => {
+    const [width, setWidth] = useState(file.parseName().length);
 
     const changeFilename = e => {
-        const name = removeBadSymbols(e.target.value) + '.' + getFileType(file.name);
-        replace(file, new File([file], name, {type: file.type}));
-        setWidth(Math.min(maxInputWidth, clearFilename(name).length));
+        const newName = removeBadSymbols(e.target.value);
+        file.changeName(newName);
+        setWidth(Math.min(maxInputWidth, file.parseName().length + 3));
     };
 
     return (
         <input
             className={classes.nameInput}
             style={{width: width + "ch"}}
-            value={clearFilename(file.name)}
+            value={file.parseName()}
             onChange={changeFilename}
         />
     );

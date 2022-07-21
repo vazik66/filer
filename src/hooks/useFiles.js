@@ -29,8 +29,6 @@ export const useFiles = (initialState=[], maxSize) => {
         setValue(value.concat(result));
     };
 
-    const download = file => saveAs(file, file.name);
-
     const remove = file => setValue(value.filter(vFile => vFile.name !== file.name));
 
     const replace = (a, b) => {
@@ -47,5 +45,5 @@ export const useFiles = (initialState=[], maxSize) => {
             saveAs(content, 'filer.zip'));
     };
 
-    return {value, showInput, size, add, download, remove, replace, downloadAll};
+    return {value, showInput, size, add, remove, replace, downloadAll};
 };
