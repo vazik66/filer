@@ -5,3 +5,13 @@
     width: 100%;
     gap: 20px;
 }
+
+.panel {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+    padding: 12px;
+    box-sizing: border-box;
+    border-radius: 16px;
+    background-color: #FFF;
+}

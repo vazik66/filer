@@ -22,9 +22,9 @@ const FileDescription = ({file}) => {
     return (
         <div
             className={classes.description}
-            style={{display: file.extended ? "flex" : "none"}}
+            style={{display: file.hidden ? "none" : null}}
         >
-            {file.extended && switchRenderer(file.value)}
+            {!file.hidden && switchRenderer(file.value)}
         </div>
     );
 };

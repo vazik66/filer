@@ -1,20 +1,25 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import classes from './FileManager.module.css';
-import FilePanel from './FilePanel';
-import FileInput from './FileHeader/FileInput';
+import FileInput from './FileInput';
+import {FilesContext} from "../../../../context/context";
+import FileDescription from "./FileDescription/FileDescription";
+import FileHeader from "./FileHeader/FileHeader";
 
-const FileManager = ({files, show}) => {
+const FileManager = ({show}) => {
+    const {files} = useContext(FilesContext);
+
     return (
         <div
             className={classes.fileManager}
             style={{display: show ? "flex" : "none"}}
         >
-            {files.value.map(file => <FilePanel
-                key={file.name}
-                mapFile={file}
-                remove={files.remove}
-            />)}
-            {files.showInput && <FileInput addFiles={files.add} />}
+            {files.map(file => (
+                <div key={file.id} className={classes.panel}>
+                    <FileHeader file={file} />
+                    <FileDescription file={file} />
+                </div>
+            ))}
+            <FileInput hidden={false} />
         </div>
     );
 };

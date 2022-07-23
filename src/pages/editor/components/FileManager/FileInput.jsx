@@ -1,9 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import classes from './FileInput.module.css';
+import {FilesContext} from "../../../../context/context";
 
-const FileInput = ({addFiles}) => {
+const FileInput = ({hidden}) => {
+    const {add} = useContext(FilesContext);
+
+    const addFiles = files => {
+        files.forEach(file => add(file));
+    };
+
     return (
-        <label className={classes.fileInput}>
+        <label className={classes.fileInput} style={{display: hidden ? "none" : null}}>
             <input
                 className={classes.input}
                 type="file"

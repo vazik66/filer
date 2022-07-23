@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useReducer, useState} from 'react';
 import classes from './Editor.module.css';
 import FileManager from './components/FileManager/FileManager';
 import Settings from './components/Settings/Settings';
@@ -9,6 +9,8 @@ import ServiceButtons from "./components/Service/ServiceButtons";
 import Characteristics from "./components/Characretictics/Characteristics";
 import {useFiles} from "../../hooks/useFiles";
 import {useViews} from "../../hooks/useViews";
+import {reducer} from '../../context/reducer';
+import {FilesContext, Provider} from "../../context/context";
 
 const fileFromString = text => {
     const currentTime = Date.now();
@@ -19,35 +21,40 @@ const fileFromString = text => {
 };
 
 const Editor = () => {
-    const files = useFiles([], 5242880);
+    // const files = useFiles([], 5242880);
+    const [state, dispatch] = useReducer(reducer, []);
     const views = useViews(-1);
 
     const [password, setPassword] = useState(null);
-    const [settingsClosed, setSettingsClosed] = useState(true);
     const [time, setTime] = useState(null);
 
     const navigate = useNavigate();
 
-    const onDrop = e => {
-        e.preventDefault();
-        files.add([...e.dataTransfer.files]);
-    };
 
-    const onDragOver = e => e.preventDefault();
 
-    const onPaste = e => {
-        const clipboardText = e.clipboardData.getData('Text');
-        if (clipboardText) files.add([fileFromString(clipboardText)]);
-        else {
-            const clipboardItems = Object.values(e.clipboardData.items);
-            const newFiles = clipboardItems
-                .filter(item => item.kind === 'file')
-                .map(item => item.getAsFile());
-            files.add(newFiles);
-        }
-    };
 
+
+    const [settingsClosed, setSettingsClosed] = useState(true);
     const toggleSettings = () => setSettingsClosed(!settingsClosed);
+
+    // const onDrop = e => {
+    //     e.preventDefault();
+    //     files.add([...e.dataTransfer.files]);
+    // };
+    //
+    // const onDragOver = e => e.preventDefault();
+    //
+    // const onPaste = e => {
+    //     const clipboardText = e.clipboardData.getData('Text');
+    //     if (clipboardText) files.add([fileFromString(clipboardText)]);
+    //     else {
+    //         const clipboardItems = Object.values(e.clipboardData.items);
+    //         const newFiles = clipboardItems
+    //             .filter(item => item.kind === 'file')
+    //             .map(item => item.getAsFile());
+    //         files.add(newFiles);
+    //     }
+    // };
 
     // async function unzip(file) {
     //     const zipper = new JSZip();
@@ -57,36 +64,38 @@ const Editor = () => {
     return (
         <div
             className={classes.editor}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            onPaste={onPaste}
+            // onDrop={onDrop}
+            // onDragOver={onDragOver}
+            // onPaste={onPaste}
         >
             <header>
                 <h1 className={classes.editorH1} onClick={() => navigate("/")}>
                     Filer
                 </h1>
-                <ServiceButtons
-                    downloadAllFiles={files.downloadAll}
-                    settingsClosed={settingsClosed}
-                    toggleSettings={toggleSettings}
-                />
+                {/*<ServiceButtons*/}
+                {/*    downloadAllFiles={files.downloadAll}*/}
+                {/*    settingsClosed={settingsClosed}*/}
+                {/*    toggleSettings={toggleSettings}*/}
+                {/*/>*/}
             </header>
-            {time && <Characteristics
-                views={views.format()}
-                time={<Countdown
-                    date={time}
-                    renderer={({days, hours}) => `${days}d ${hours}h`}
-                    autoStart
-                />}
-                size={files.size.format()}
-            />}
-            <FileManager files={files} show={settingsClosed} />
-            <Settings
-                setViews={views.changeMax}
-                setTime={setTime}
-                setPassword={setPassword}
-                show={!settingsClosed}
-            />
+            {/*{time && <Characteristics*/}
+            {/*    views={views.format()}*/}
+            {/*    time={<Countdown*/}
+            {/*        date={time}*/}
+            {/*        renderer={({days, hours}) => `${days}d ${hours}h`}*/}
+            {/*        autoStart*/}
+            {/*    />}*/}
+            {/*    size={files.size.format()}*/}
+            {/*/>}*/}
+            <Provider>
+                <FileManager show={settingsClosed} />
+            </Provider>
+            {/*<Settings*/}
+            {/*    setViews={views.changeMax}*/}
+            {/*    setTime={setTime}*/}
+            {/*    setPassword={setPassword}*/}
+            {/*    show={!settingsClosed}*/}
+            {/*/>*/}
         </div>
     );
 };

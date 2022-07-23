@@ -11,3 +11,4 @@
 7. <b>Mobile</b>
 8. File id, not name
 9. Setting on new page (backend required)
+10. Change 'show ? flex : none'
