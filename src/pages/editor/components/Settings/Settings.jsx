@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import classes from './Settings.module.css';
 import AmountSelection from './AmountSelection';
 import 'datejs';
+import {FilesContext} from "../../../../context/context";
 
-const Settings = ({setViews, setTime, setPassword, show}) => {
+const Settings = ({show}) => {
+    const {changeMaxViews, changePassword, changeTime} = useContext(FilesContext);
     const views = [1, 5, 20, -1];
     const times = ['7 days', '14 days', '30 days'];
 
@@ -11,7 +13,7 @@ const Settings = ({setViews, setTime, setPassword, show}) => {
         const date = new Date();
         const amount = +(duration.split(' ')[0]);
         date.add(amount).day();
-        setTime(date.getTime());
+        changeTime(date.getTime());
     }
 
     return (
@@ -22,7 +24,7 @@ const Settings = ({setViews, setTime, setPassword, show}) => {
             <AmountSelection
                 text="Set views amount"
                 amounts={views}
-                setValue={setViews}
+                setValue={changeMaxViews}
                 input
             />
             <AmountSelection
@@ -34,7 +36,7 @@ const Settings = ({setViews, setTime, setPassword, show}) => {
             <h3 className={classes.h3}>Password</h3>
             <input
                 className={classes.password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={e => changePassword(e.target.value)}
                 placeholder="Not required"
             />
         </div>

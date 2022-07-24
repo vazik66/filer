@@ -5,8 +5,9 @@ import {FilesContext} from "../../../../context/context";
 const FileInput = ({hidden}) => {
     const {add} = useContext(FilesContext);
 
-    const addFiles = files => {
-        files.forEach(file => add(file));
+    const addFiles = e => {
+        [...e.target.files].forEach(file => add(file));
+        e.target.value = "";
     };
 
     return (
@@ -14,7 +15,7 @@ const FileInput = ({hidden}) => {
             <input
                 className={classes.input}
                 type="file"
-                onChange={e => addFiles([...e.target.files])}
+                onChange={addFiles}
                 multiple
             />
             <div className={classes.text}>

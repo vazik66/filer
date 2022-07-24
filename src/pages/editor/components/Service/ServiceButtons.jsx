@@ -1,18 +1,21 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import classes from "./ServiceButtons.module.css";
 import IconButton from "./IconButton";
 import svgStatus from "../../../../icons/status.svg";
 import svgSaveAll from "../../../../icons/newSaveAll.svg";
 import svgSettings from "../../../../icons/settings.svg";
+import {FilesContext} from "../../../../context/context";
 
-const ServiceButtons = ({downloadAllFiles, settingsClosed, toggleSettings}) => {
+const ServiceButtons = ({settingsClosed, toggleSettings}) => {
+    const {saveAll} = useContext(FilesContext);
+
     return (
         <div className={classes.serviceButtons}>
             <IconButton image={svgStatus} show />
             <IconButton
                 image={svgSaveAll}
                 show={settingsClosed}
-                onClick={downloadAllFiles}
+                onClick={saveAll}
             />
             <IconButton
                 image={svgSettings}

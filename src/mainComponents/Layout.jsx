@@ -1,11 +1,14 @@
 import React from 'react';
 import {Outlet} from 'react-router-dom';
 import classes from "./Layout.module.css";
+import {Provider} from "../context/context";
 
 const Layout = () => {
     return (
         <div className={classes.layout}>
-            <Outlet />
+            <Provider>
+                <Outlet />
+            </Provider>
             <footer>
                 <a
                     className={classes.link}

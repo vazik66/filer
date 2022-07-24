@@ -6,7 +6,7 @@ import FileDescription from "./FileDescription/FileDescription";
 import FileHeader from "./FileHeader/FileHeader";
 
 const FileManager = ({show}) => {
-    const {files} = useContext(FilesContext);
+    const {files, addFilesButtonShow, maxSize} = useContext(FilesContext);
 
     return (
         <div
@@ -14,12 +14,16 @@ const FileManager = ({show}) => {
             style={{display: show ? "flex" : "none"}}
         >
             {files.map(file => (
-                <div key={file.id} className={classes.panel}>
+                <div
+                    key={file.id}
+                    style={{backgroundColor: file.willBeSent ? null : "#ff8484"}}
+                    className={classes.panel}
+                >
                     <FileHeader file={file} />
                     <FileDescription file={file} />
                 </div>
             ))}
-            <FileInput hidden={false} />
+            {maxSize && addFilesButtonShow && <FileInput />}
         </div>
     );
 };
