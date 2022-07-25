@@ -2,7 +2,7 @@ import React, {useState, useContext} from 'react';
 import classes from './FilenameInput.module.css';
 import {FilesContext} from "../../../../../context/context";
 
-const maxInputWidth = 30;
+const maxInputWidth = 20;
 const replaceableSymbols = /[`|<>'"?*:/\\ ]/gi;
 
 const removeBadSymbols = string => string.replace(replaceableSymbols, '-');
@@ -16,7 +16,7 @@ const FilenameInput = ({file}) => {
     const changeFilename = e => {
         const newName = removeBadSymbols(e.target.value) + '.' + parseType(file.value);
         changeName(file.id, newName);
-        setWidth(Math.min(maxInputWidth, parseName(file.value).length + 3));
+        setWidth(Math.min(maxInputWidth, parseName(file.value).length + 1));
     };
 
     return (
