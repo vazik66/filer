@@ -21,7 +21,7 @@ const ServiceButtons = ({settingsClosed, toggleSettings}) => {
                 image={svgSettings}
                 iconFilter={{filter: settingsClosed ? null : "invert(100%) sepia(0%) saturate(7500%) hue-rotate(20deg) brightness(101%) contrast(96%)"}}
                 onClick={toggleSettings}
-                style={{backgroundColor: settingsClosed ? "" : "#2F2F2F"}}
+                style={{backgroundColor: settingsClosed ? null : "#2F2F2F"}}
                 show
             />
         </div>

@@ -5,25 +5,25 @@ import {FilesContext} from "../../../../context/context";
 import FileDescription from "./FileDescription/FileDescription";
 import FileHeader from "./FileHeader/FileHeader";
 
-const FileManager = ({show}) => {
-    const {files, addFilesButtonShow, maxSize} = useContext(FilesContext);
+const FileManager = ({hidden}) => {
+    const {files, addFilesButtonShow} = useContext(FilesContext);
 
     return (
         <div
             className={classes.fileManager}
-            style={{display: show ? "flex" : "none"}}
+            style={{display: hidden ? "none" : null}}
         >
             {files.map(file => (
                 <div
                     key={file.id}
-                    style={{backgroundColor: file.willBeSent ? null : "#ff8484"}}
+                    style={{boxShadow: file.willBeSent ? null : "inset 0px 0px 0px 4px red"}}
                     className={classes.panel}
                 >
                     <FileHeader file={file} />
                     <FileDescription file={file} />
                 </div>
             ))}
-            {maxSize && addFilesButtonShow && <FileInput />}
+            <FileInput hidden={!addFilesButtonShow} />
         </div>
     );
 };

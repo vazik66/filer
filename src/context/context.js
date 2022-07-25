@@ -2,7 +2,7 @@ import React, {useReducer, useState, createContext, useEffect} from 'react';
 import {reducer} from './reducer';
 import {saveAs} from 'file-saver';
 import JSZip from 'jszip';
-import {useViews} from "../hooks/useViews";
+import {useViews} from '../hooks/useViews';
 
 const filesToExpand = ['text/plain', 'image/jpeg', 'image/png',
     'video/mp4', 'video/mov', 'video/ogv', 'video/webm'];
@@ -42,12 +42,10 @@ export const Provider = ({children}) => {
                 maxSize: maxSize
             }
         }),
-        remove: id => {
-            dispatch({
-                type: 'remove',
-                payload: {id: id, maxSize: maxSize}
-            });
-        },
+        remove: id => dispatch({
+            type: 'remove',
+            payload: {id: id, maxSize: maxSize}
+        }),
         toggleHidden: id => dispatch({
             type: 'toggleHidden',
             payload: {id: id}
@@ -61,9 +59,10 @@ export const Provider = ({children}) => {
             saveAs(file.value, file.value.name);
         },
         saveAll: () => {
-            if (!files.length) return;
+            const filteredFiles = files.filter(file => file.willBeSent);
+            if (!filteredFiles.length) return;
             const zip = new JSZip();
-            files.forEach(file => zip.file(file.value.name, file.value))
+            filteredFiles.forEach(file => zip.file(file.value.name, file.value));
             zip.generateAsync({type:'blob'}).then(content =>
                 saveAs(content, 'filer.zip'));
         },

@@ -1,7 +1,7 @@
 const generateId = () => (performance.now().toString(36) +
     Math.random().toString(36)).replace(/\./g, '');
 
-const updateAddWillBeSent = (files, maxSize) => {
+const updateWillBeSent = (files, maxSize) => {
     let currentSize = 0;
     let result = [];
     files.forEach(file => {
@@ -10,25 +10,7 @@ const updateAddWillBeSent = (files, maxSize) => {
         result.push({...file, willBeSent: enoughSpace});
         currentSize += enoughSpace ? fileSize : 0;
     });
-    return result;
-};
-
-const updateRemoveWillBeSent = (files, maxSize) => {
-    let currentSize = 0;
-    let result = [];
-    let i = 0;
-    while (i < files.length) {
-        if (currentSize + files[i].value.size < maxSize) {
-            result.push({
-                ...files[i],
-                willBeSent: true
-            });
-            currentSize += files[i].value.size;
-            i++;
-        }
-        else break;
-    }
-    return [result, i];
+    return result.sort((x, y) => y.willBeSent - x.willBeSent);
 };
 
 export const reducer = (state, action) => {
@@ -42,13 +24,11 @@ export const reducer = (state, action) => {
                 canShow: payload.canShow,
                 hidden: payload.hidden
             });
-            return updateAddWillBeSent(files, payload.maxSize)
-                .sort((x, y) => y.willBeSent - x.willBeSent);
+            return updateWillBeSent(files, payload.maxSize);
         }
         case 'remove': {
             const files = [...state.filter(file => file.id !== payload.id)];
-            const [updatedFiles, i] = updateRemoveWillBeSent(files, payload.maxSize);
-            return updatedFiles.concat(files.slice(i));
+            return updateWillBeSent(files, payload.maxSize);
         }
         case 'toggleHidden':
             return state.map(file =>

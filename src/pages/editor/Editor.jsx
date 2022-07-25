@@ -65,7 +65,7 @@ const Editor = () => {
                 />
             </header>
             <Characteristics />
-            <FileManager show={settingsClosed} />
+            <FileManager hidden={!settingsClosed} />
             <Settings show={!settingsClosed} />
         </div>
     );
