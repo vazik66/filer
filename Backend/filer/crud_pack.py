@@ -1,16 +1,13 @@
-import datetime
-
 from aiosqlite import Connection
-from filer.utils.logger import get_logger
+from utils.logger import get_logger
 
 logger = get_logger('DB_CRUD')
 
 
-async def create(db: Connection, key: str, password: str, max_views: int,
-                 time_to_live: datetime.datetime) -> bool:
+async def create(db: Connection, pack) -> bool:
     query = """INSERT INTO pack (key, password, max_views, time_to_live) VALUES ($1, $2, $3, $4);"""  # noqa
     try:
-        await db.execute(query, [key, password, max_views, time_to_live])
+        await db.execute(query, [pack.key, pack.password, pack.max_views, pack.time_to_live])
         await db.commit()
     except Exception as e:
         logger.error(e)

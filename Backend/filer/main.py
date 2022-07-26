@@ -1,10 +1,14 @@
 from aiohttp import web
 from routes import routes
-from filer.utils.settings import Settings
+from utils.settings import Settings
 from database import init
+from aiohttp_middlewares import cors_middleware
 
 if __name__ == '__main__':
-    app = web.Application()
+    app = web.Application(middlewares=[
+        cors_middleware(origins=["http://localhost:3000"])
+    ])
+
     app['cfg'] = Settings()
     # Setup on startup functions
     app.cleanup_ctx.append(init)

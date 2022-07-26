@@ -4,9 +4,10 @@ import zipfile
 
 import aiohttp.hdrs
 from aiohttp import web
-from filer.utils import logger, utils
+from utils import logger, utils
 import crud_pack
-import secrets
+from pack import PackCreateSchema, PackCreate
+from marshmallow import ValidationError
 
 routes = web.RouteTableDef()
 logger = logger.get_logger("routes")
@@ -16,7 +17,7 @@ __MAX_PACK_SIZE_IN_BYTES = 1024 * 1024 * 1024 * MAX_PACK_SIZE_IN_GB
 
 
 @routes.get('/{key}')
-async def get_file_by_id(request: web.Request) -> web.Response:
+async def get_pack_by_id(request: web.Request) -> web.Response:
     key = request.match_info['key']
     db = request.app['db']
 
@@ -32,7 +33,7 @@ async def get_file_by_id(request: web.Request) -> web.Response:
     if pack['password']:
         if not data:
             raise web.HTTPUnauthorized
-        if not utils.hash_password(data.get('password')) == pack['password']:
+        if utils.hash_password(data.get('password')) != pack['password']:
             raise web.HTTPUnauthorized
 
     if pack['max_views']:
@@ -49,7 +50,7 @@ async def get_file_by_id(request: web.Request) -> web.Response:
         utils.delete_file(pack['key'])
         raise web.HTTPNoContent
 
-    filename = f'{pack["key"]}.zip'
+    filename = pack["key"] + '.zip'
     headers = {
         "Content-disposition": "attachment; filename={file_name}".format(file_name=filename)
     }
@@ -60,53 +61,44 @@ async def get_file_by_id(request: web.Request) -> web.Response:
 
 
 @routes.post("/")
-async def create_file(request: web.Request) -> web.Response:
+async def create_pack(request: web.Request) -> web.Response:
     db = request.app['db']
-
-    # Generate key until it is unique
-    key = secrets.token_urlsafe(5)
-    while pack := await crud_pack.get(db, key):
-        key = secrets.token_urlsafe(5)
-
-    zip_archive = zipfile.ZipFile(f'storage/{key}.zip', 'w')
+    file_bytes = []
+    size = 0
+    filename = ''
 
     # For each file in multipart writes it to zip archive
     # Checks json data and applies params
     async for field in (await request.multipart()):
         if field.name == 'file':
-            size = 0
-
-            file_bytes = []
+            filename = field.filename
             while True:
                 chunk = await field.read_chunk()
                 if not chunk:
                     break
                 size += len(chunk)
+                if size > __MAX_PACK_SIZE_IN_BYTES:
+                    raise web.HTTPClientError(body="File too big")
                 file_bytes.append(chunk)
 
-            if size > __MAX_PACK_SIZE_IN_BYTES:
-                zip_archive.close()
-                raise web.HTTPClientError(body="File too big")
+        if field.headers.get(aiohttp.hdrs.CONTENT_TYPE) == 'application/json':
+            # Validate json and create PackCreate object
+            try:
+                data = await field.json()
+                pack = PackCreate(**PackCreateSchema().load(data), db=db)
+                pack.key = await pack.key
+            except json.JSONDecodeError:
+                raise web.HTTPBadRequest(reason="Bad json")
+            except ValidationError as e:
+                raise web.HTTPBadRequest(reason=e.messages)
+        else:
+            raise web.HTTPBadRequest(reason="Content-type: application/json not found")
 
-            zip_archive.writestr(field.filename, b''.join(file_bytes))
+    with zipfile.ZipFile(f'storage/{pack.key}.zip', 'w') as f:
+        f.writestr(filename, b''.join(file_bytes))
+    await crud_pack.create(db, pack)
 
-        if field.headers[aiohttp.hdrs.CONTENT_TYPE] == 'application/json':
-            data = await field.json()
-            if not (data.get('time_to_live') or data.get('max_views')):
-                raise web.HTTPBadRequest
-            if data.get('password'):
-                data['password'] = utils.hash_password(data.get('password'))
-
-    zip_archive.close()
-    await crud_pack.create(
-            db,
-            key=key,
-            password=data.get('password'),
-            max_views=data.get('max_views'),
-            time_to_live=datetime.datetime.utcnow() + datetime.timedelta(days=data.get('time_to_live'))
-    )
-
-    return web.json_response({"key": key})
+    return web.json_response({"key": pack.key})
 
 
 @routes.put('/{key}')
@@ -118,26 +110,17 @@ async def update_pack(request: web.Request) -> web.Response:
 @routes.get('/')
 async def get_all(request: web.Request) -> web.Response:
     db = request.app['db']
-
     result = []
+
     rows = await crud_pack.get_all(db)
-
     for row in rows:
-        result.append(dict(
-                key=row['key'],
-                views=row['views'],
-                max_views=row['max_views'],
-                password=row['password'],
-                time_to_live=row['time_to_live']
-            )
-        )
-
+        result.append(dict(**row))
     return web.json_response(result)
 
 
 # Admin method
 @routes.delete('/{key}')
-async def delete_url(request: web.Request) -> web.Response:
+async def delete_pack(request: web.Request) -> web.Response:
     key = request.match_info['key']
     db = request.app['db']
 
@@ -149,6 +132,3 @@ async def delete_url(request: web.Request) -> web.Response:
     utils.delete_file(pack['key'])
 
     return web.json_response({"status": "deleted"})
-
-
-

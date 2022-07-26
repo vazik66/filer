@@ -3,11 +3,11 @@ GET localhost:8080/
 Content-Type:: application/json
 
 ### Get by key
-GET localhost:8080/LoPAMxo
+GET localhost:8080/rXC6AKM
 Content-Type: application/json
 
 {
-  "password": "password"
+  "password": "secret"
 }
 
 ### Delete
@@ -26,8 +26,7 @@ Content-Disposition: form-data; name="file"; filename="requirements.txt"
 Content-Type: application/json
 
 {
-  "max_views": 1,
-  "time_to_live": 7
+    "password": "secret",
+    "max_views": 100,
+    "time_to_live": 7
 }
-###
-

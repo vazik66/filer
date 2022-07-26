@@ -10,7 +10,7 @@ from utils.utils import hash_password
 
 class PackCreateSchema(Schema):
     password = fields.Str(required=False, validate=lambda val: len(val) > 4, missing=None)
-    max_views = fields.Int(required=False, validate=lambda val: val > 0, missing=10000)
+    max_views = fields.Int(required=False, validate=lambda val: val > 0, missing=1)
     time_to_live = fields.Int(required=False, validate=lambda val: val in (7, 14, 30), missing=7)
 
 
