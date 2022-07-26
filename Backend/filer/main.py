@@ -1,10 +1,11 @@
 from aiohttp import web
-from filer.routes import routes
+from routes import routes
+from filer.utils.settings import Settings
 from database import init
 
 if __name__ == '__main__':
     app = web.Application()
-
+    app['cfg'] = Settings()
     # Setup on startup functions
     app.cleanup_ctx.append(init)
 

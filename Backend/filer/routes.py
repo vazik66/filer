@@ -1,126 +1,154 @@
-import os
+import datetime
+import json
 import zipfile
 
+import aiohttp.hdrs
 from aiohttp import web
-
-from filer.file import File
-from logger import get_logger
-from aiohttp import streamer
+from filer.utils import logger, utils
+import crud_pack
+import secrets
 
 routes = web.RouteTableDef()
-logger = get_logger("routes")
+logger = logger.get_logger("routes")
+
+MAX_PACK_SIZE_IN_GB = 1
+__MAX_PACK_SIZE_IN_BYTES = 1024 * 1024 * 1024 * MAX_PACK_SIZE_IN_GB
 
 
-@routes.get('/{uid}')
+@routes.get('/{key}')
 async def get_file_by_id(request: web.Request) -> web.Response:
-    logger.info(request.items())
-    uid = request.match_info['uid']
-    db = request.app["DB"]
+    key = request.match_info['key']
+    db = request.app['db']
 
-    async with db.execute("SELECT uid, download_once, save_for_n_weeks FROM url WHERE uid=$1;",
-                          [uid]) as cur:
-        row = await cur.fetchone()
-        if row is None:
+    try:
+        data = await request.json()
+    except json.JSONDecodeError:
+        data = None
+
+    pack = await crud_pack.get(db, key)
+    if not pack:
+        raise web.HTTPNoContent
+
+    if pack['password']:
+        if not data:
+            raise web.HTTPUnauthorized
+        if not utils.hash_password(data.get('password')) == pack['password']:
+            raise web.HTTPUnauthorized
+
+    if pack['max_views']:
+        if pack['views'] >= pack['max_views']:
+            await crud_pack.delete(db, key)
+            utils.delete_file(pack['key'])
             raise web.HTTPNoContent
+        else:
+            await crud_pack.update(db, pack['views'] + 1, pack['key'])
 
-    # TODO: Check if row[1] is true, then delete it from db, and from os (bg task)
+    if datetime.datetime.strptime(pack['time_to_live'],
+                                  '%Y-%m-%d %H:%M:%S.%f') < datetime.datetime.utcnow():
+        await crud_pack.delete(db, key)
+        utils.delete_file(pack['key'])
+        raise web.HTTPNoContent
 
-    filename = f'{row[0]}.zip'
+    filename = f'{pack["key"]}.zip'
     headers = {
         "Content-disposition": "attachment; filename={file_name}".format(file_name=filename)
     }
     return web.Response(
             headers=headers,
-            body=file_sender(filename)
+            body=utils.file_sender(filename)
     )
 
 
 @routes.post("/")
 async def create_file(request: web.Request) -> web.Response:
-    db = request.app['DB']
-    file_options = File()
-    zip_archive = zipfile.ZipFile(f'storage/{file_options.uid}.zip', 'w')
+    db = request.app['db']
 
-    # For each file in multipart data saves it to tmp directory, then creates zip from all files;
-    # Check params in multipart and applies them to file_options
+    # Generate key until it is unique
+    key = secrets.token_urlsafe(5)
+    while pack := await crud_pack.get(db, key):
+        key = secrets.token_urlsafe(5)
+
+    zip_archive = zipfile.ZipFile(f'storage/{key}.zip', 'w')
+
+    # For each file in multipart writes it to zip archive
+    # Checks json data and applies params
     async for field in (await request.multipart()):
         if field.name == 'file':
-            file_path = f'storage/tmp/{file_options.uid}_{field.filename}'
             size = 0
 
-            with open(file_path, 'wb') as f:
-                while True:
-                    chunk = await field.read_chunk()
-                    if not chunk:
-                        break
-                    size += len(chunk)
-                    f.write(chunk)
+            file_bytes = []
+            while True:
+                chunk = await field.read_chunk()
+                if not chunk:
+                    break
+                size += len(chunk)
+                file_bytes.append(chunk)
 
-            zip_archive.write(file_path, arcname=field.filename)
-            os.remove(file_path)
+            if size > __MAX_PACK_SIZE_IN_BYTES:
+                zip_archive.close()
+                raise web.HTTPClientError(body="File too big")
 
-        if field.name == 'params':
-            p = await field.read(decode=True)
-            p = p.decode('utf-8')
+            zip_archive.writestr(field.filename, b''.join(file_bytes))
 
-            if p == 'save_for_1_weeks':
-                file_options.save_for_n_weeks = 1
-                file_options.download_once = False
-
-            if p == 'save_for_2_weeks':
-                file_options.save_for_n_weeks = 2
-                file_options.download_once = False
+        if field.headers[aiohttp.hdrs.CONTENT_TYPE] == 'application/json':
+            data = await field.json()
+            if not (data.get('time_to_live') or data.get('max_views')):
+                raise web.HTTPBadRequest
+            if data.get('password'):
+                data['password'] = utils.hash_password(data.get('password'))
 
     zip_archive.close()
-
-    await db.execute(
-            "INSERT INTO url (uid, download_once, save_for_n_weeks) VALUES ($1, $2, $3);",
-            [file_options.uid, file_options.download_once, file_options.save_for_n_weeks]
+    await crud_pack.create(
+            db,
+            key=key,
+            password=data.get('password'),
+            max_views=data.get('max_views'),
+            time_to_live=datetime.datetime.utcnow() + datetime.timedelta(seconds=data.get('time_to_live'))
     )
-    await db.commit()
 
-    return web.json_response({"uid": file_options.uid})
+    return web.json_response({"key": key})
+
+
+@routes.put('/{key}')
+async def update_pack(request: web.Request) -> web.Response:
+    raise web.HTTPNotImplemented
 
 
 # Admin method
 @routes.get('/')
 async def get_all(request: web.Request) -> web.Response:
-    db = request.app['DB']
+    db = request.app['db']
 
     result = []
-    async with db.execute('SELECT * FROM url') as cur:
-        rows = await cur.fetchall()
-        for row in rows:
-            result.append({"uid": row[0], "download_once": row[1], "save_for_n_weeks": row[2]})
+    rows = await crud_pack.get_all(db)
+
+    for row in rows:
+        result.append(dict(
+                key=row['key'],
+                views=row['views'],
+                max_views=row['max_views'],
+                password=row['password'],
+                time_to_live=row['time_to_live']
+            )
+        )
 
     return web.json_response(result)
 
 
 # Admin method
-@routes.delete('/{uid}')
+@routes.delete('/{key}')
 async def delete_url(request: web.Request) -> web.Response:
-    uid = request.match_info['uid']
-    db = request.app['DB']
+    key = request.match_info['key']
+    db = request.app['db']
 
-    async with db.execute("SELECT uid, download_once, save_for_n_weeks FROM url WHERE uid=$1;",
-                          [uid]) as cur:
-        row = await cur.fetchone()
-        if row is None:
-            raise web.HTTPNoContent
+    pack = await crud_pack.get(db, key)
+    if not pack:
+        raise web.HTTPNoContent
 
-    async with db.execute("DELETE FROM URL WHERE uid=$1;", [uid]) as cur:
-        _ = await cur.fetchone()
-    await db.commit()
-
-    os.remove(f'storage/{row[0]}.zip')
+    await crud_pack.delete(db, key)
+    utils.delete_file(pack['key'])
 
     return web.json_response({"status": "deleted"})
 
 
-@streamer
-async def file_sender(writer, filename: str):
-    with open(f'storage/{filename}', 'rb') as f:
-        chunk = f.read(2 ** 16)
-        while chunk:
-            await writer.write(chunk)
-            chunk = f.read(2 ** 16)
+

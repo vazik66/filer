@@ -1,37 +1,44 @@
-import sqlite3
-
 import aiosqlite
 import os
-from logger import get_logger
+from filer.utils.logger import get_logger
 
-
-db_path = 'database.db'
 logger = get_logger('database')
 
 
-async def init(app):
-    logger.info("Initializing database")
-    if not os.path.exists(db_path):
-        logger.info("Database not exists. Creating")
-        with open(db_path, 'w'):
-            pass
+async def create_database(db_path: str):
+    logger.info("Database does not exists. Creating...")
 
-    db = await aiosqlite.connect(db_path)
+    with open(db_path, 'w'):
+        pass
 
     create_tables_query = """
-       CREATE TABLE IF NOT EXISTS url(
-       uid VARCHAR(6) PRIMARY KEY UNIQUE NOT NULL,
-       download_once BOOLEAN NOT NULL,
-       save_for_n_weeks INTEGER
-       );
-       """
+        CREATE TABLE pack(
+        key VARCHAR(6) PRIMARY KEY,
+        password TEXT,
+        views INTEGER DEFAULT 0,
+        max_views INTEGER,
+        time_to_live DATETIME
+        );
+    """
 
-    with sqlite3.connect(db_path) as conn:
-        cur = conn.cursor()
-        cur.execute(create_tables_query)
-        conn.commit()
+    async with aiosqlite.connect(db_path) as db:
+        await db.execute(create_tables_query)
+        await db.commit()
 
     logger.info("Database created")
-    app['DB'] = db
+
+
+async def init(app):
+    db_path = app['cfg'].db_path
+
+    if not os.path.exists(db_path):
+        await create_database(db_path)
+
+    logger.info("Connecting to database...")
+    db = await aiosqlite.connect(db_path)
+    db.row_factory = aiosqlite.Row
+    logger.info("Database connected.")
+
+    app['db'] = db
     yield
     await db.close()

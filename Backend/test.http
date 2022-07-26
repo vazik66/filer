@@ -1,0 +1,33 @@
+### Get all
+GET localhost:8080/
+Content-Type:: application/json
+
+### Get by key
+GET localhost:8080/LoPAMxo
+Content-Type: application/json
+
+{
+  "password": "password"
+}
+
+### Delete
+DELETE localhost:8080/MokzXtc
+Content-Type:: application/json
+
+### Create
+POST http://localhost:8080/
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="requirements.txt"
+
+< requirements.txt
+--boundary
+Content-Type: application/json
+
+{
+  "max_views": 1,
+  "time_to_live": 7
+}
+###
+
