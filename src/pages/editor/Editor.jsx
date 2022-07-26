@@ -16,7 +16,7 @@ const fileFromString = text => {
 };
 
 const Editor = () => {
-    const {add} = useContext(FilesContext);
+    const {add, collectData} = useContext(FilesContext);
     const [settingsClosed, setSettingsClosed] = useState(true);
     const navigate = useNavigate();
 
@@ -48,6 +48,15 @@ const Editor = () => {
     //     return await zipper.loadAsync(file);
     // }
 
+    const postData = async () => {
+        const formData = new FormData();
+        for (const [k, v] of Object.entries(await collectData()))
+            formData.append(k, v);
+        const request = new XMLHttpRequest();
+        request.open('POST', 'http://localhost:3000/');
+        request.send(formData);
+    };
+
     return (
         <div
             className={classes.editor}
@@ -67,6 +76,7 @@ const Editor = () => {
             <Characteristics />
             <FileManager hidden={!settingsClosed} />
             <Settings show={!settingsClosed} />
+            <button onClick={postData}>Send</button>
         </div>
     );
 };
