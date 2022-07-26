@@ -1,29 +1,21 @@
 import React from 'react';
 import classes from "./ASButtonList.module.css";
+import FilteredInput from "./FilteredInput";
 
 const ASButtonList = ({amounts, buttonStyle, setValue, input}) => {
-    const select = value => {
-        console.log(value)
-        if (value) setValue(value);
-    };
-
     return (
         <div className={classes.list}>
-            {amounts.map((item) =>
+            {amounts.map(item =>
                 <button
                     key={item}
                     style={buttonStyle}
                     className={classes.item}
-                    onClick={() => select(item)}
+                    onClick={() => setValue(item)}
                 >
                     {item < 0 ? "∞" : item}
-                </button>)}
-            {input && <input
-                style={{paddingLeft: "12px", width: "180px"}}
-                className={classes.item}
-                type="number"
-                onChange={e => select(e.target.value)}
-            />}
+                </button>
+            )}
+            <FilteredInput setValue={setValue} pattern={/\D/g} hidden={!input} />
         </div>
     );
 };

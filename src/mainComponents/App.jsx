@@ -7,15 +7,15 @@ import Layout from './Layout';
 
 const App = () => {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Layout />}>
-                    <Route index element={<Main />}/>
-                    <Route path=":userId" element={<Navigate to="/" />}/>
-                    <Route path={":userId/:packId"} element={<Editor />} />
-                </Route>
-            </Routes>
-        </BrowserRouter>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Layout />}>
+                        <Route index element={<Main />}/>
+                        <Route path=":userId" element={<Navigate to="/" />}/>
+                        <Route path={":userId/:packId"} element={<Editor />} />
+                    </Route>
+                </Routes>
+            </BrowserRouter>
     );
 };
 

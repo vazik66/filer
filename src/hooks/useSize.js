@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState} from "react";
 
 const formatBytes = (bytes, decimals=2) => {
     if (bytes === 0) return '0 B';
@@ -9,24 +9,14 @@ const formatBytes = (bytes, decimals=2) => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 };
 
-export const useSize = (maxSize) => {
+export const useSize = maxSize => {
     const [value, setValue] = useState(0);
     const [max, setMax] = useState(maxSize);
 
+    const recalculate = files => setValue(files.map(file => file.value.size)
+        .reduce((a, b) => a + b, 0));
+
     const format = () => formatBytes(value) + ' / ' + formatBytes(max);
 
-    const add = size => setValue(value + size);
-
-    const canAdd = () => value < max;
-
-    const canAddFile = fileSize => value + fileSize < max
-
-    const recalculate = files => {
-        if (!files) return;
-        const sizes = files.map(file => file.size);
-        const sum = sizes.reduce((a, b) => a + b, 0);
-        setValue(sum);
-    };
-
-    return {value, add, canAdd, canAddFile, recalculate, format};
+    return {value, max, format, recalculate};
 };

@@ -1,33 +1,34 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import classes from './FileHeader.module.css';
 import FileButton from './FileButton';
 import File from './File';
 import svgSave from '../../../../../icons/save.svg';
 import svgDelete from '../../../../../icons/delete.svg';
-import svgExpand from '../../../../../icons/expand.svg';
+import svgExpand from '../../../../../icons/newExpand.svg';
+import {FilesContext} from "../../../../../context/context";
 
-const fileTypesToShow = ['text/plain', 'image/jpeg', 'image/png'];
+const FileHeader = ({file}) => {
+    const {save, remove, toggleHidden} = useContext(FilesContext);
 
-const FileHeader = ({file, download, remove, toggleDescription, replace}) => {
     return (
         <div className={classes.fileHeader}>
             <FileButton
                 image={svgSave}
-                onClick={() => download(file)}
+                onClick={() => save(file.id)}
                 style={{margin: "auto 15px auto 0"}}
             />
-            <File file={file} replace={replace} />
+            <File file={file} />
             <FileButton
                 image={svgExpand}
-                onClick={toggleDescription}
+                onClick={() => toggleHidden(file.id)}
                 style={{
                     margin: "auto auto auto 15px",
-                    display: fileTypesToShow.includes(file.type) ? "flex" : "none"
+                    display: !file.canShow ? "none" : null
                 }}
             />
             <FileButton
                 image={svgDelete}
-                onClick={() => remove(file)}
+                onClick={() => remove(file.id)}
                 style={{margin: "auto 0 auto auto"}}
             />
         </div>
