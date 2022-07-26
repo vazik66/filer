@@ -103,7 +103,7 @@ async def create_file(request: web.Request) -> web.Response:
             key=key,
             password=data.get('password'),
             max_views=data.get('max_views'),
-            time_to_live=datetime.datetime.utcnow() + datetime.timedelta(seconds=data.get('time_to_live'))
+            time_to_live=datetime.datetime.utcnow() + datetime.timedelta(days=data.get('time_to_live'))
     )
 
     return web.json_response({"key": key})
