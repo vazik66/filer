@@ -4,7 +4,7 @@ import zipfile
 
 import aiohttp.hdrs
 from aiohttp import web
-from filer.utils import logger, utils
+from utils import logger, utils
 import crud_pack
 import secrets
 

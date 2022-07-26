@@ -8,5 +8,5 @@ export const useViews = maxViews => {
 
     const format = () => value + ' / ' + ((max === -1) ? '∞' : max);
 
-    return {changeMax, format};
+    return {value, max, changeMax, format};
 };

@@ -1,6 +1,6 @@
 from aiohttp import web
 from routes import routes
-from filer.utils.settings import Settings
+from utils.settings import Settings
 from database import init
 
 if __name__ == '__main__':

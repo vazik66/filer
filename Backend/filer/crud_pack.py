@@ -1,7 +1,7 @@
 import datetime
 
 from aiosqlite import Connection
-from filer.utils.logger import get_logger
+from utils.logger import get_logger
 
 logger = get_logger('DB_CRUD')
 

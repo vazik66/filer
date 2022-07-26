@@ -19,6 +19,24 @@ export const Provider = ({children}) => {
 
     useEffect(() => size.recalculate(files), [files]);
 
+    const formArchive = () => {
+        const filteredFiles = files.filter(file => file.willBeSent);
+        if (!filteredFiles.length) return null;
+        const zip = new JSZip();
+        filteredFiles.forEach(file => zip.file(file.value.name, file.value));
+        return zip.generateAsync({type: 'blob'});
+    };
+
+    const collectData = async () => ({
+        'password': password,
+        'time': time,
+        'viewsCurrent': views.value,
+        'viewsMax': views.max,
+        'sizeCurrent': size.value,
+        'sizeMax': size.max,
+        'archive': await formArchive()
+    });
+
     const value = {
         files: files,
         add: file => dispatch({
@@ -46,14 +64,7 @@ export const Provider = ({children}) => {
             const file = files.find(file => file.id === id);
             saveAs(file.value, file.value.name);
         },
-        saveAll: () => {
-            const filteredFiles = files.filter(file => file.willBeSent);
-            if (!filteredFiles.length) return;
-            const zip = new JSZip();
-            filteredFiles.forEach(file => zip.file(file.value.name, file.value));
-            zip.generateAsync({type:'blob'}).then(content =>
-                saveAs(content, 'filer.zip'));
-        },
+        saveAll: () => formArchive()?.then(content => saveAs(content, 'filer.zip')),
 
         getViewsString: views.format,
         changeMaxViews: views.changeMax,
@@ -65,7 +76,9 @@ export const Provider = ({children}) => {
 
         maxSize: size.max,
         addFilesButtonShow: size.value < size.max,
-        getSizeString: size.format
+        getSizeString: size.format,
+
+        collectData: collectData
     };
 
     return (
