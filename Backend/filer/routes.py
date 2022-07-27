@@ -82,7 +82,7 @@ async def create_pack(request: web.Request) -> web.Response:
         raise web.HTTPBadRequest(reason="No json provided")
 
     if not filename or not file_bytes:
-        raise web.HTTPBadRequest(reason="No filename")
+        raise web.HTTPBadRequest(reason="No file provided")
 
     with zipfile.ZipFile(f'storage/{pack.key}.zip', 'w') as f:
         f.writestr(filename, b''.join(file_bytes))
