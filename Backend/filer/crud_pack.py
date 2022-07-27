@@ -1,6 +1,7 @@
+from sqlite3 import Row
+
 from aiosqlite import Connection
 from utils.logger import get_logger
-
 logger = get_logger('DB_CRUD')
 
 
@@ -15,7 +16,7 @@ async def create(db: Connection, pack) -> bool:
     return True
 
 
-async def get(db: Connection, key) -> dict | None:
+async def get(db: Connection, key) -> Row | None:
     query = """SELECT key, password, views, max_views, time_to_live FROM pack WHERE key=$1;"""  # noqa
     try:
         async with db.execute(query, [key]) as cur:

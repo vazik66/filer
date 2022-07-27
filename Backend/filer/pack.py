@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import aiosqlite
 from marshmallow import Schema, fields
 
-from filer import crud_pack
+from crud_pack import get
 from utils.utils import hash_password
 
 
@@ -24,14 +24,15 @@ class PackCreate:
     @staticmethod
     async def __generate_key(db) -> str:
         key = secrets.token_urlsafe(5)
-        while _ := await crud_pack.get(db, key):
+        while _ := await get(db, key):
             key = secrets.token_urlsafe(5)
         return key
 
 
 class Pack:
-    def __init__(self, key: str, password: str | None, max_views: int, time_to_live: int) -> None:
+    def __init__(self, key: str, password: str | None, views: int, max_views: int, time_to_live: str) -> None:
         self.key = key
         self.password = password
+        self.views = views
         self.max_views = max_views
-        self.time_to_live = time_to_live
+        self.time_to_live = datetime.strptime(time_to_live, '%Y-%m-%d %H:%M:%S.%f')
