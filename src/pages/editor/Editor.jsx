@@ -6,6 +6,7 @@ import FileManager from './components/FileManager/FileManager';
 import Settings from './components/Settings/Settings';
 import {useNavigate} from 'react-router-dom';
 import {FilesContext} from '../../context/context';
+import { file } from 'jszip';
 
 const fileFromString = text => {
     const currentTime = Date.now();
@@ -51,11 +52,22 @@ const Editor = () => {
     const postData = async () => {
         const formData = new FormData();
         const data = await collectData();
-        formData.append('file', new Blob(
-            [JSON.stringify(data)], {type: "application/json"}));
-        const request = new XMLHttpRequest();
-        request.open('POST', 'http://localhost:8080/');
-        request.send(formData);
+
+        formData.append('file', data.archive)
+        delete data.archive
+
+        formData.append('json', new Blob(
+            [JSON.stringify(data)], {type: "application/json"}
+            )
+        );
+
+        const response = await fetch('http://localhost:8080/', {
+            method: 'POST',
+            mode: 'cors',
+            body: formData
+        })
+        
+        console.log(response.json())
     };
 
     return (

@@ -34,7 +34,7 @@ export const Provider = ({children}) => {
         'max_views': views.max,
         // 'sizeCurrent': size.value,
         // 'sizeMax': size.max,
-        // 'archive': await formArchive()
+        'archive': await formArchive()
     });
 
     const value = {

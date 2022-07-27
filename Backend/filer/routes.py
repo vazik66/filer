@@ -35,7 +35,7 @@ async def get_pack_by_id(request: web.Request) -> web.Response:
         if not data:
             raise web.HTTPUnauthorized
         if utils.hash_password(data.get('password')) != pack.password:
-            raise web.HTTPUnauthorized
+            raise web.HTTPUnauthorized(reason='Wrong password')
 
     if pack.views >= pack.max_views:
         await crud_pack.delete(db, key)
@@ -69,7 +69,6 @@ async def create_pack(request: web.Request) -> web.Response:
     async for field in (await request.multipart()):
         if field.name == 'file':
             filename, file_bytes = await handle_file_upload(field)
-            print(filename, file_bytes)
 
         elif field.headers.get(aiohttp.hdrs.CONTENT_TYPE) == 'application/json':
             pack = await handle_json(field, db)
