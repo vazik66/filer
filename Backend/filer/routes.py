@@ -69,6 +69,7 @@ async def create_pack(request: web.Request) -> web.Response:
     async for field in (await request.multipart()):
         if field.name == 'file':
             filename, file_bytes = await handle_file_upload(field)
+            print(filename, file_bytes)
 
         elif field.headers.get(aiohttp.hdrs.CONTENT_TYPE) == 'application/json':
             pack = await handle_json(field, db)
@@ -80,8 +81,8 @@ async def create_pack(request: web.Request) -> web.Response:
     if not pack:
         raise web.HTTPBadRequest(reason="No json provided")
 
-    if not (filename or file_bytes):
-        raise web.HTTPBadRequest(reason="No file provided")
+    if not filename or not file_bytes:
+        raise web.HTTPBadRequest(reason="No filename")
 
     with zipfile.ZipFile(f'storage/{pack.key}.zip', 'w') as f:
         f.writestr(filename, b''.join(file_bytes))
