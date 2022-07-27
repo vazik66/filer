@@ -29,12 +29,12 @@ export const Provider = ({children}) => {
 
     const collectData = async () => ({
         'password': password,
-        'time': time,
-        'viewsCurrent': views.value,
-        'viewsMax': views.max,
-        'sizeCurrent': size.value,
-        'sizeMax': size.max,
-        'archive': await formArchive()
+        'time_to_live': 7, //time,
+        // 'viewsCurrent': views.value,
+        'max_views': views.max,
+        // 'sizeCurrent': size.value,
+        // 'sizeMax': size.max,
+        // 'archive': await formArchive()
     });
 
     const value = {

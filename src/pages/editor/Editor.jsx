@@ -50,10 +50,11 @@ const Editor = () => {
 
     const postData = async () => {
         const formData = new FormData();
-        for (const [k, v] of Object.entries(await collectData()))
-            formData.append(k, v);
+        const data = await collectData();
+        formData.append('file', new Blob(
+            [JSON.stringify(data)], {type: "application/json"}));
         const request = new XMLHttpRequest();
-        request.open('POST', 'http://localhost:3000/');
+        request.open('POST', 'http://localhost:8080/');
         request.send(formData);
     };
 
