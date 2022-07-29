@@ -64,7 +64,8 @@ const Editor = () => {
         const response = await fetch('http://localhost:8080/', {
             method: 'POST',
             mode: 'cors',
-            body: formData
+            body: formData,
+            credentials: 'include'
         })
         
         console.log(response.json())

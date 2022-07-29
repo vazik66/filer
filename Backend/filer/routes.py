@@ -8,6 +8,8 @@ from utils import logger, utils
 import crud_pack
 from pack import PackCreateSchema, PackCreate, Pack
 from marshmallow import ValidationError
+from session import generate_session_id
+
 
 routes = web.RouteTableDef()
 logger = logger.get_logger("routes")
@@ -59,9 +61,34 @@ async def get_pack_by_id(request: web.Request) -> web.Response:
     )
 
 
+@routes.get('/edit/{key}')
+async def edit_pack(request: web.Request) -> web.Response:
+    r = request.app['redis']
+    key = request.match_info['key']
+
+    session_id = request.cookies.get('id')
+
+    if not session_id:
+        raise web.HTTPUnauthorized(
+                reason='No cookie at all, so cant verify that you are the creator'
+        )
+
+    # session_id = session_id[:len(session_id)-1]
+    redis_data = r.lrange(session_id, 0, -1)
+    logger.debug(f'data in redis = {redis_data}')
+    if not redis_data:
+        raise web.HTTPUnauthorized(reason='No data in redis for such session_id')
+
+    if key not in redis_data:
+        raise web.HTTPUnauthorized(reason='This session_id is not the creator of pack')
+
+    return web.json_response({'status': 'ok', 'message': 'you can edit pack'})
+
+
 @routes.post("/")
 async def create_pack(request: web.Request) -> web.Response:
     db = request.app['db']
+    r = request.app['redis']
     pack = None
     filename = None
     file_bytes = None
@@ -73,10 +100,6 @@ async def create_pack(request: web.Request) -> web.Response:
         elif field.headers.get(aiohttp.hdrs.CONTENT_TYPE) == 'application/json':
             pack = await handle_json(field, db)
 
-        else:
-            logger.info(field.name)
-            logger.info(field.headers.items())
-
     if not pack:
         raise web.HTTPBadRequest(reason="No json provided")
 
@@ -87,7 +110,34 @@ async def create_pack(request: web.Request) -> web.Response:
         f.writestr(filename, b''.join(file_bytes))
     await crud_pack.create(db, pack)
 
-    return web.json_response({"key": pack.key})
+    #
+    #
+    #
+    #
+    # Session
+
+    session_id = request.cookies.get('id')
+    logger.debug(msg=f'Session_id = {session_id}')
+    new_user = False
+    r_data = None
+
+    if session_id:
+        r_data = r.exists(session_id)
+
+    if not r_data or not session_id:
+        logger.debug(msg=f'No session id. generating one')
+        session_id = generate_session_id()
+        logger.debug(msg=f'Generated = {session_id}')
+        new_user = True
+
+    logger.debug(msg=f'Pushing pack key to redis with {session_id} as key')
+    r.lpush(session_id, pack.key)
+    logger.debug(msg=f'Pushed successfully')
+
+    resp = web.json_response({"key": pack.key})
+    if new_user:
+        resp.set_cookie("id", session_id, domain='localhost', httponly=True, samesite='Lax')
+    return resp
 
 
 @routes.put('/{key}')

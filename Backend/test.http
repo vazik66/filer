@@ -30,3 +30,7 @@ Content-Type: application/json
     "max_views": 100,
     "time_to_live": 7
 }
+
+### Edit
+GET localhost:8080/edit/qeMHhCg
+Content-Type: application/json
